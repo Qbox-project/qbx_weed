@@ -5,17 +5,17 @@ local currentHouse = nil
 local plantSpawned = false
 
 DrawText3Ds = function(x, y, z, text)
-	SetTextScale(0.35, 0.35)
+    SetTextScale(0.35, 0.35)
     SetTextFont(4)
     SetTextProportional(1)
     SetTextColour(255, 255, 255, 215)
     SetTextEntry("STRING")
     SetTextCentre(true)
     AddTextComponentString(text)
-    SetDrawOrigin(x,y,z, 0)
+    SetDrawOrigin(x, y, z, 0)
     DrawText(0.0, 0.0)
     local factor = (string.len(text)) / 370
-    DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
+    DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
     ClearDrawOrigin()
 end
 
@@ -33,11 +33,15 @@ function spawnHousePlants()
         if not plantSpawned then
             for k, _ in pairs(housePlants[currentHouse]) do
                 local plantData = {
-                    ["plantCoords"] = {["x"] = json.decode(housePlants[currentHouse][k].coords).x, ["y"] = json.decode(housePlants[currentHouse][k].coords).y, ["z"] = json.decode(housePlants[currentHouse][k].coords).z},
-                    ["plantProp"] = GetHashKey(QBWeed.Plants[housePlants[currentHouse][k].sort]["stages"][housePlants[currentHouse][k].stage]),
+                    ["plantCoords"] = {["x"] = json.decode(housePlants[currentHouse][k].coords).x,
+                        ["y"] = json.decode(housePlants[currentHouse][k].coords).y,
+                        ["z"] = json.decode(housePlants[currentHouse][k].coords).z},
+                    ["plantProp"] = GetHashKey(QBWeed.Plants[housePlants[currentHouse][k].sort]["stages"][
+                        housePlants[currentHouse][k].stage]),
                 }
 
-                local plantProp = CreateObject(plantData["plantProp"], plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], false, false, false)
+                local plantProp = CreateObject(plantData["plantProp"], plantData["plantCoords"]["x"],
+                    plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], false, false, false)
                 while not plantProp do Wait(0) end
                 PlaceObjectOnGroundProperly(plantProp)
                 Wait(10)
@@ -54,11 +58,15 @@ function despawnHousePlants()
         if plantSpawned then
             for k, _ in pairs(housePlants[currentHouse]) do
                 local plantData = {
-                    ["plantCoords"] = {["x"] = json.decode(housePlants[currentHouse][k].coords).x, ["y"] = json.decode(housePlants[currentHouse][k].coords).y, ["z"] = json.decode(housePlants[currentHouse][k].coords).z},
+                    ["plantCoords"] = {["x"] = json.decode(housePlants[currentHouse][k].coords).x,
+                        ["y"] = json.decode(housePlants[currentHouse][k].coords).y,
+                        ["z"] = json.decode(housePlants[currentHouse][k].coords).z},
                 }
 
                 for _, stage in pairs(QBWeed.Plants[housePlants[currentHouse][k].sort]["stages"]) do
-                    local closestPlant = GetClosestObjectOfType(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], 3.5, GetHashKey(stage), false, false, false)
+                    local closestPlant = GetClosestObjectOfType(plantData["plantCoords"]["x"],
+                        plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], 3.5, GetHashKey(stage), false,
+                        false, false)
                     if closestPlant ~= 0 then
                         DeleteObject(closestPlant)
                     end
@@ -82,9 +90,12 @@ CreateThread(function()
                     if housePlants[currentHouse][k].gender == "woman" then gender = "F" end
 
                     local plantData = {
-                        ["plantCoords"] = {["x"] = json.decode(housePlants[currentHouse][k].coords).x, ["y"] = json.decode(housePlants[currentHouse][k].coords).y, ["z"] = json.decode(housePlants[currentHouse][k].coords).z},
+                        ["plantCoords"] = {["x"] = json.decode(housePlants[currentHouse][k].coords).x,
+                            ["y"] = json.decode(housePlants[currentHouse][k].coords).y,
+                            ["z"] = json.decode(housePlants[currentHouse][k].coords).z},
                         ["plantStage"] = housePlants[currentHouse][k].stage,
-                        ["plantProp"] = GetHashKey(QBWeed.Plants[housePlants[currentHouse][k].sort]["stages"][housePlants[currentHouse][k].stage]),
+                        ["plantProp"] = GetHashKey(QBWeed.Plants[housePlants[currentHouse][k].sort]["stages"][
+                            housePlants[currentHouse][k].stage]),
                         ["plantSort"] = {
                             ["name"] = housePlants[currentHouse][k].sort,
                             ["label"] = QBWeed.Plants[housePlants[currentHouse][k].sort]["label"],
@@ -100,59 +111,126 @@ CreateThread(function()
                         }
                     }
 
-                    local plyDistance = #(GetEntityCoords(ped) - vector3(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"]))
+                    local plyDistance = #
+                        (
+                        GetEntityCoords(ped) -
+                        vector3(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"],
+                            plantData["plantCoords"]["z"]))
 
                     if plyDistance < 0.8 then
 
                         ClosestTarget = k
                         if plantData["plantStats"]["health"] > 0 then
                             if plantData["plantStage"] ~= plantData["plantStats"]["highestStage"] then
-                                DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"],  Lang:t('text.sort') .. plantData["plantSort"]["label"]..'~w~ ['..plantData["plantStats"]["gender"]..'] | '..Lang:t('text.nutrition')..' ~b~'..plantData["plantStats"]["food"]..'% ~w~ | '..Lang:t('text.health')..' ~b~'..plantData["plantStats"]["health"]..'%')
+                                DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"],
+                                    plantData["plantCoords"]["z"],
+                                    Lang:t('text.sort') ..
+                                    plantData["plantSort"]["label"] ..
+                                    '~w~ [' ..
+                                    plantData["plantStats"]["gender"] ..
+                                    '] | ' ..
+                                    Lang:t('text.nutrition') ..
+                                    ' ~b~' ..
+                                    plantData["plantStats"]["food"] ..
+                                    '% ~w~ | ' .. Lang:t('text.health') .. ' ~b~' ..
+                                    plantData["plantStats"]["health"] .. '%')
                             else
-                                DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"] + 0.2, Lang:t('text.harvest_plant'))
-                                DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"],  Lang:t('text.sort')..' ~g~'..plantData["plantSort"]["label"]..'~w~ ['..plantData["plantStats"]["gender"]..'] | '..Lang:t('text.nutrition')..' ~b~'..plantData["plantStats"]["food"]..'% ~w~ | '..Lang:t('text.health')..' ~b~'..plantData["plantStats"]["health"]..'%')
+                                DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"],
+                                    plantData["plantCoords"]["z"] + 0.2, Lang:t('text.harvest_plant'))
+                                DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"],
+                                    plantData["plantCoords"]["z"],
+                                    Lang:t('text.sort') ..
+                                    ' ~g~' ..
+                                    plantData["plantSort"]["label"] ..
+                                    '~w~ [' ..
+                                    plantData["plantStats"]["gender"] ..
+                                    '] | ' ..
+                                    Lang:t('text.nutrition') ..
+                                    ' ~b~' ..
+                                    plantData["plantStats"]["food"] ..
+                                    '% ~w~ | ' .. Lang:t('text.health') .. ' ~b~' ..
+                                    plantData["plantStats"]["health"] .. '%')
                                 if IsControlJustPressed(0, 38) then
-                                    QBCore.Functions.Progressbar("remove_weed_plant", Lang:t('text.harvesting_plant'), 8000, false, true, {
-                                        disableMovement = true,
-                                        disableCarMovement = true,
-                                        disableMouse = false,
-                                        disableCombat = true,
-                                    }, {
-                                        animDict = "amb@world_human_gardener_plant@male@base",
-                                        anim = "base",
-                                        flags = 16,
-                                    }, {}, {}, function() -- Done
+                                    if lib.progressCircle({
+                                        duration = 8000,
+                                        position = 'bottom',
+                                        label = Lang:t('text.harvesting_plant'),
+                                        useWhileDead = false,
+                                        canCancel = true,
+                                        disable = {
+                                            move = true,
+                                            car = true,
+                                            mouse = false,
+                                            combat = true,
+                                        },
+                                        anim = {
+                                            dict = "amb@world_human_gardener_plant@male@base",
+                                            clip = "base",
+                                        },
+                                    })
+                                    then
                                         ClearPedTasks(ped)
                                         local amount = math.random(1, 6)
                                         if plantData["plantStats"]["gender"] == "M" then
                                             amount = math.random(1, 2)
                                         end
-                                        TriggerServerEvent('qb-weed:server:harvestPlant', currentHouse, amount, plantData["plantSort"]["name"], plantData["plantStats"]["plantId"])
-                                    end, function() -- Cancel
+                                        TriggerServerEvent('qb-weed:server:harvestPlant', currentHouse, amount,
+                                            plantData["plantSort"]["name"], plantData["plantStats"]["plantId"])
+                                    else
                                         ClearPedTasks(ped)
-                                        QBCore.Functions.Notify("Process Canceled", "error")
-                                    end)
+                                        lib.notify({
+                                            id = 'error',
+                                            title = Lang:t('error.process_canceled'),
+                                            duration = 2500,
+                                            style = {
+                                                backgroundColor = '#141517',
+                                                color = '#ffffff'
+                                            },
+                                            icon = 'xmark',
+                                            iconColor = '#C0392B'
+                                        })
+                                    end
                                 end
                             end
                         elseif plantData["plantStats"]["health"] == 0 then
-                            DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], Lang:t('error.plant_has_died'))
+                            DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"],
+                                plantData["plantCoords"]["z"], Lang:t('error.plant_has_died'))
                             if IsControlJustPressed(0, 38) then
-                                QBCore.Functions.Progressbar("remove_weed_plant", Lang:t('text.removing_the_plant'), 8000, false, true, {
-                                    disableMovement = true,
-                                    disableCarMovement = true,
-                                    disableMouse = false,
-                                    disableCombat = true,
-                                }, {
-                                    animDict = "amb@world_human_gardener_plant@male@base",
-                                    anim = "base",
-                                    flags = 16,
-                                }, {}, {}, function() -- Done
+                                if lib.progressCircle({
+                                    duration = 8000,
+                                    position = 'bottom',
+                                    label = Lang:t('text.removing_the_plant'),
+                                    useWhileDead = false,
+                                    canCancel = true,
+                                    disable = {
+                                        move = true,
+                                        car = true,
+                                        mouse = false,
+                                        combat = true,
+                                    },
+                                    anim = {
+                                        dict = "amb@world_human_gardener_plant@male@base",
+                                        clip = "base",
+                                    },
+                                })
+                                then
                                     ClearPedTasks(ped)
-                                    TriggerServerEvent('qb-weed:server:removeDeathPlant', currentHouse, plantData["plantStats"]["plantId"])
-                                end, function() -- Cancel
+                                    TriggerServerEvent('qb-weed:server:removeDeathPlant', currentHouse,
+                                        plantData["plantStats"]["plantId"])
+                                else
                                     ClearPedTasks(ped)
-                                    QBCore.Functions.Notify( Lang:t('error.process_canceled'), "error")
-                                end)
+                                    lib.notify({
+                                        id = 'error',
+                                        title = Lang:t('error.process_canceled'),
+                                        duration = 2500,
+                                        style = {
+                                            backgroundColor = '#141517',
+                                            color = '#ffffff'
+                                        },
+                                        icon = 'xmark',
+                                        iconColor = '#C0392B'
+                                    })
+                                end
                             end
                         end
                     end
@@ -213,37 +291,75 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
     local ClosestPlant = 0
     for _, v in pairs(QBWeed.Props) do
         if ClosestPlant == 0 then
-            ClosestPlant = GetClosestObjectOfType(plyCoords.x, plyCoords.y, plyCoords.z, 0.8, GetHashKey(v), false, false, false)
+            ClosestPlant = GetClosestObjectOfType(plyCoords.x, plyCoords.y, plyCoords.z, 0.8, GetHashKey(v), false, false
+                , false)
         end
     end
 
     if currentHouse ~= nil then
         if ClosestPlant == 0 then
-	LocalPlayer.state:set("inv_busy", true, true)
-            QBCore.Functions.Progressbar("plant_weed_plant", Lang:t('text.planting'), 8000, false, true, {
-                disableMovement = true,
-                disableCarMovement = true,
-                disableMouse = false,
-                disableCombat = true,
-            }, {
-                animDict = "amb@world_human_gardener_plant@male@base",
-                anim = "base",
-                flags = 16,
-		LocalPlayer.state:set("inv_busy", false, true)
-            }, {}, {}, function() -- Done
+            LocalPlayer.state:set("inv_busy", true, true)
+            if lib.progressCircle({
+                duration = 8000,
+                position = 'bottom',
+                label = Lang:t('text.planting'),
+                useWhileDead = false,
+                canCancel = true,
+                disable = {
+                    move = true,
+                    car = true,
+                    mouse = false,
+                    combat = true,
+                },
+                anim = {
+                    dict = "amb@world_human_gardener_plant@male@base",
+                    clip = "base",
+                },
+            })
+            then
                 ClearPedTasks(ped)
                 TriggerServerEvent('qb-weed:server:placePlant', json.encode(plantData["plantCoords"]), type, currentHouse)
                 TriggerServerEvent('qb-weed:server:removeSeed', item.slot, type)
-            end, function() -- Cancel
+            else
                 ClearPedTasks(ped)
-                QBCore.Functions.Notify(Lang:t('error.process_canceled'), "error")
-		LocalPlayer.state:set("inv_busy", false, true)
-            end)
+                lib.notify({
+                    id = 'error',
+                    title = Lang:t('error.process_canceled'),
+                    duration = 2500,
+                    style = {
+                        backgroundColor = '#141517',
+                        color = '#ffffff'
+                    },
+                    icon = 'xmark',
+                    iconColor = '#C0392B'
+                })
+                LocalPlayer.state:set("inv_busy", false, true)
+            end
         else
-            QBCore.Functions.Notify(Lang:t('error.cant_place_here'), 'error', 3500)
+            lib.notify({
+                id = 'error_cant_place',
+                title = Lang:t('error.cant_place_here'),
+                duration = 2500,
+                style = {
+                    backgroundColor = '#141517',
+                    color = '#ffffff'
+                },
+                icon = 'xmark',
+                iconColor = '#C0392B'
+            })
         end
     else
-        QBCore.Functions.Notify(Lang:t('error.not_safe_here'), 'error', 3500)
+        lib.notify({
+            id = 'error_notsafe',
+            title = Lang:t('error.not_safe_here'),
+            duration = 2500,
+            style = {
+                backgroundColor = '#141517',
+                color = '#ffffff'
+            },
+            icon = 'xmark',
+            iconColor = '#C0392B'
+        })
     end
 end)
 
@@ -257,9 +373,12 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
             end
 
             local plantData = {
-                ["plantCoords"] = {["x"] = json.decode(housePlants[currentHouse][ClosestTarget].coords).x, ["y"] = json.decode(housePlants[currentHouse][ClosestTarget].coords).y, ["z"] = json.decode(housePlants[currentHouse][ClosestTarget].coords).z},
+                ["plantCoords"] = {["x"] = json.decode(housePlants[currentHouse][ClosestTarget].coords).x,
+                    ["y"] = json.decode(housePlants[currentHouse][ClosestTarget].coords).y,
+                    ["z"] = json.decode(housePlants[currentHouse][ClosestTarget].coords).z},
                 ["plantStage"] = housePlants[currentHouse][ClosestTarget].stage,
-                ["plantProp"] = GetHashKey(QBWeed.Plants[housePlants[currentHouse][ClosestTarget].sort]["stages"][housePlants[currentHouse][ClosestTarget].stage]),
+                ["plantProp"] = GetHashKey(QBWeed.Plants[housePlants[currentHouse][ClosestTarget].sort]["stages"][
+                    housePlants[currentHouse][ClosestTarget].stage]),
                 ["plantSort"] = {
                     ["name"] = housePlants[currentHouse][ClosestTarget].sort,
                     ["label"] = QBWeed.Plants[housePlants[currentHouse][ClosestTarget].sort]["label"],
@@ -274,39 +393,79 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
                     ["plantId"] = housePlants[currentHouse][ClosestTarget].plantid,
                 }
             }
-            local plyDistance = #(GetEntityCoords(ped) - vector3(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"]))
-
+            local plyDistance = #
+                (
+                GetEntityCoords(ped) -
+                vector3(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"])
+            )
             if plyDistance < 1.0 then
                 if plantData["plantStats"]["food"] == 100 then
                     QBCore.Functions.Notify(Lang:t('error.not_need_nutrition'), 'error', 3500)
                 else
-		            LocalPlayer.state:set("inv_busy", true, true)
-                    QBCore.Functions.Progressbar("plant_weed_plant", Lang:t('text.feeding_plant'), math.random(4000, 8000), false, true, {
-                        disableMovement = true,
-                        disableCarMovement = true,
-                        disableMouse = false,
-                        disableCombat = true,
-                    }, {
-                        animDict = "timetable@gardener@filling_can",
-                        anim = "gar_ig_5_filling_can",
-                        flags = 16,
-
-                        LocalPlayer.state:set("inv_busy", false, true)
-                    }, {}, {}, function() -- Done
+                    LocalPlayer.state:set("inv_busy", true, true)
+                    if lib.progressCircle({
+                        duration = math.random(4000, 8000),
+                        position = 'bottom',
+                        label = Lang:t('text.feeding_plant'),
+                        useWhileDead = false,
+                        canCancel = true,
+                        disable = {
+                            move = true,
+                            car = true,
+                            mouse = false,
+                            combat = true,
+                        },
+                        anim = {
+                            dict = "timetable@gardener@filling_can",
+                            clip = "gar_ig_5_filling_can",
+                        },
+                    })
+                    then
                         ClearPedTasks(ped)
                         local newFood = math.random(40, 60)
-                        TriggerServerEvent('qb-weed:server:foodPlant', currentHouse, newFood, plantData["plantSort"]["name"], plantData["plantStats"]["plantId"])
-                    end, function() -- Cancel
+                        TriggerServerEvent('qb-weed:server:foodPlant', currentHouse, newFood,
+                            plantData["plantSort"]["name"], plantData["plantStats"]["plantId"])
+                    else
                         ClearPedTasks(ped)
-			            LocalPlayer.state:set("inv_busy", false, true)
-                        QBCore.Functions.Notify(Lang:t('error.process_canceled'), "error")
-                    end)
+                        LocalPlayer.state:set("inv_busy", false, true)
+                        lib.notify({
+                            id = 'error',
+                            title = Lang:t('error.process_canceled'),
+                            duration = 2500,
+                            style = {
+                                backgroundColor = '#141517',
+                                color = '#ffffff'
+                            },
+                            icon = 'xmark',
+                            iconColor = '#C0392B'
+                        })
+                    end
                 end
             else
-                QBCore.Functions.Notify(Lang:t('error.cant_place_here'), "error")
+                lib.notify({
+                    id = 'error_cant_place',
+                    title = Lang:t('error.cant_place_here'),
+                    duration = 2500,
+                    style = {
+                        backgroundColor = '#141517',
+                        color = '#ffffff'
+                    },
+                    icon = 'xmark',
+                    iconColor = '#C0392B'
+                })
             end
         else
-            QBCore.Functions.Notify(Lang:t('error.cant_place_here'), "error")
+            lib.notify({
+                id = 'error_cant_place',
+                title = Lang:t('error.cant_place_here'),
+                duration = 2500,
+                style = {
+                    backgroundColor = '#141517',
+                    color = '#ffffff'
+                },
+                icon = 'xmark',
+                iconColor = '#C0392B'
+            })
         end
     end
 end)
