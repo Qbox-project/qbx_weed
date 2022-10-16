@@ -178,17 +178,7 @@ CreateThread(function()
                                             plantData["plantSort"]["name"], plantData["plantStats"]["plantId"])
                                     else
                                         ClearPedTasks(ped)
-                                        lib.notify({
-                                            id = 'error',
-                                            title = Lang:t('error.process_canceled'),
-                                            duration = 2500,
-                                            style = {
-                                                backgroundColor = '#141517',
-                                                color = '#ffffff'
-                                            },
-                                            icon = 'xmark',
-                                            iconColor = '#C0392B'
-                                        })
+                                        lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
                                     end
                                 end
                             end
@@ -219,17 +209,7 @@ CreateThread(function()
                                         plantData["plantStats"]["plantId"])
                                 else
                                     ClearPedTasks(ped)
-                                    lib.notify({
-                                        id = 'error',
-                                        title = Lang:t('error.process_canceled'),
-                                        duration = 2500,
-                                        style = {
-                                            backgroundColor = '#141517',
-                                            color = '#ffffff'
-                                        },
-                                        icon = 'xmark',
-                                        iconColor = '#C0392B'
-                                    })
+                                    lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
                                 end
                             end
                         end
@@ -322,44 +302,14 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
                 TriggerServerEvent('qb-weed:server:removeSeed', item.slot, type)
             else
                 ClearPedTasks(ped)
-                lib.notify({
-                    id = 'error',
-                    title = Lang:t('error.process_canceled'),
-                    duration = 2500,
-                    style = {
-                        backgroundColor = '#141517',
-                        color = '#ffffff'
-                    },
-                    icon = 'xmark',
-                    iconColor = '#C0392B'
-                })
+                lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
                 LocalPlayer.state:set("inv_busy", false, true)
             end
         else
-            lib.notify({
-                id = 'error_cant_place',
-                title = Lang:t('error.cant_place_here'),
-                duration = 2500,
-                style = {
-                    backgroundColor = '#141517',
-                    color = '#ffffff'
-                },
-                icon = 'xmark',
-                iconColor = '#C0392B'
-            })
+            lib.notify({ description = Lang:t("error.cant_place_here"), type = 'error' })
         end
     else
-        lib.notify({
-            id = 'error_notsafe',
-            title = Lang:t('error.not_safe_here'),
-            duration = 2500,
-            style = {
-                backgroundColor = '#141517',
-                color = '#ffffff'
-            },
-            icon = 'xmark',
-            iconColor = '#C0392B'
-        })
+        lib.notify({ description = Lang:t("error.not_safe_here"), type = 'error' })
     end
 end)
 
@@ -428,44 +378,14 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
                     else
                         ClearPedTasks(ped)
                         LocalPlayer.state:set("inv_busy", false, true)
-                        lib.notify({
-                            id = 'error',
-                            title = Lang:t('error.process_canceled'),
-                            duration = 2500,
-                            style = {
-                                backgroundColor = '#141517',
-                                color = '#ffffff'
-                            },
-                            icon = 'xmark',
-                            iconColor = '#C0392B'
-                        })
+                        lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
                     end
                 end
             else
-                lib.notify({
-                    id = 'error_cant_place',
-                    title = Lang:t('error.cant_place_here'),
-                    duration = 2500,
-                    style = {
-                        backgroundColor = '#141517',
-                        color = '#ffffff'
-                    },
-                    icon = 'xmark',
-                    iconColor = '#C0392B'
-                })
+                lib.notify({ description = Lang:t("error.cant_place_here"), type = 'error' })
             end
         else
-            lib.notify({
-                id = 'error_cant_place',
-                title = Lang:t('error.cant_place_here'),
-                duration = 2500,
-                style = {
-                    backgroundColor = '#141517',
-                    color = '#ffffff'
-                },
-                icon = 'xmark',
-                iconColor = '#C0392B'
-            })
+            lib.notify({ description = Lang:t("error.not_safe_here"), type = 'error' })
         end
     end
 end)
