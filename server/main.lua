@@ -26,20 +26,28 @@ RegisterNetEvent('qb-weed:server:placePlant', function(coords, sort, currentHous
         gender = "woman"
     end
 
-    MySQL.insert('INSERT INTO house_plants (building, coords, gender, sort, plantid) VALUES (?, ?, ?, ?, ?)', { currentHouse, coords, gender, sort, math.random(111111, 999999) })
+    MySQL.insert('INSERT INTO house_plants (building, coords, gender, sort, plantid) VALUES (?, ?, ?, ?, ?)', {
+        currentHouse,
+        coords,
+        gender,
+        sort,
+        math.random(111111, 999999)
+    })
 
     TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, currentHouse)
 end)
 
 RegisterNetEvent('qb-weed:server:removeDeathPlant', function(building, plantId)
-    MySQL.query('DELETE FROM house_plants WHERE plantid = ? AND building = ?', { plantId, building })
+    MySQL.query('DELETE FROM house_plants WHERE plantid = ? AND building = ?', {
+        plantId, building
+    })
 
     TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, building)
 end)
 
 CreateThread(function()
     while true do
-        local housePlants = MySQL.query.await('SELECT * FROM house_plants', {})
+        local housePlants = MySQL.query.await('SELECT * FROM house_plants')
 
         for k, _ in pairs(housePlants) do
             if housePlants[k].food >= 50 then
@@ -69,7 +77,7 @@ end)
 
 CreateThread(function()
     while true do
-        local housePlants = MySQL.query.await('SELECT * FROM house_plants', {})
+        local housePlants = MySQL.query.await('SELECT * FROM house_plants')
 
         for k, _ in pairs(housePlants) do
             if housePlants[k].health > 50 then
@@ -78,7 +86,7 @@ CreateThread(function()
                 if housePlants[k].progress + Grow < 100 then
                     MySQL.update('UPDATE house_plants SET progress = ? WHERE plantid = ?', { (housePlants[k].progress + Grow), housePlants[k].plantid })
                 elseif housePlants[k].progress + Grow >= 100 then
-                    if housePlants[k].stage ~= QBWeed.Plants[housePlants[k].sort]["highestStage"] then
+                    if housePlants[k].stage ~= Config.Plants[housePlants[k].sort]["highestStage"] then
                         if housePlants[k].stage == "stage-a" then
                             MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', { 'stage-b', housePlants[k].plantid })
                         elseif housePlants[k].stage == "stage-b" then
@@ -105,35 +113,17 @@ CreateThread(function()
     end
 end)
 
-QBCore.Functions.CreateUseableItem("weed_white-widow_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'white-widow', item)
-end)
-
-QBCore.Functions.CreateUseableItem("weed_skunk_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'skunk', item)
-end)
-
-QBCore.Functions.CreateUseableItem("weed_purple-haze_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'purple-haze', item)
-end)
-
-QBCore.Functions.CreateUseableItem("weed_og-kush_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'og-kush', item)
-end)
-
-QBCore.Functions.CreateUseableItem("weed_amnesia_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'amnesia', item)
-end)
-
-QBCore.Functions.CreateUseableItem("weed_ak47_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'ak47', item)
-end)
+for k, v in pairs(Config.Plants) do
+    QBCore.Functions.CreateUseableItem('weed_' .. v.item .. '_seed', function(source, item)
+        TriggerClientEvent('qb-weed:client:placePlant', source, k, item)
+    end)
+end
 
 QBCore.Functions.CreateUseableItem("weed_nutrition", function(source, item)
     TriggerClientEvent('qb-weed:client:foodPlant', source, item)
 end)
 
-RegisterServerEvent('qb-weed:server:removeSeed', function(itemslot, seed)
+RegisterNetEvent('qb-weed:server:removeSeed', function(itemslot, seed)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
 
@@ -149,45 +139,81 @@ RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantNam
     if weedBag ~= nil then
         if weedBag.amount >= sndAmount then
             if house ~= nil then
-                local result = MySQL.query.await('SELECT * FROM house_plants WHERE plantid = ? AND building = ?', { plantId, house })
+                local result = MySQL.query.await('SELECT * FROM house_plants WHERE plantid = ? AND building = ?', {
+                    plantId,
+                    house
+                })
 
                 if result[1] ~= nil then
                     Player.Functions.AddItem('weed_' .. plantName .. '_seed', amount)
                     Player.Functions.AddItem('weed_' .. plantName, sndAmount)
                     Player.Functions.RemoveItem('empty_weed_bag', sndAmount)
 
-                    MySQL.query('DELETE FROM house_plants WHERE plantid = ? AND building = ?', { plantId, house })
+                    MySQL.query('DELETE FROM house_plants WHERE plantid = ? AND building = ?', {
+                        plantId,
+                        house
+                    })
 
                     TriggerClientEvent('QBCore:Notify', src, Lang:t('text.the_plant_has_been_harvested'), 'success', 3500)
                     TriggerClientEvent('ox_lib:notify', src, { description = Lang:t('text.the_plant_has_been_harvested'), type = 'success' })
                     TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, house)
                 else
-                    TriggerClientEvent('ox_lib:notify', src, { description = Lang:t('error.this_plant_no_longer_exists'), type = 'error' })
+                    TriggerClientEvent('ox_lib:notify', src, {
+                        description = Lang:t('error.this_plant_no_longer_exists'),
+                        type = 'error'
+                    })
 
-                    MySQL.Async.execute('UPDATE players SET inventory = ? WHERE citizenid = ?', { json.encode({}), Player.PlayerData.citizenid })
+                    MySQL.update('UPDATE players SET inventory = ? WHERE citizenid = ?', {
+                        json.encode({}),
+                        Player.PlayerData.citizenid
+                    })
                 end
             else
-                TriggerClientEvent('ox_lib:notify', src, { description = Lang:t('error.house_not_found'), type = 'error' })
+                TriggerClientEvent('ox_lib:notify', src, {
+                    description = Lang:t('error.house_not_found'),
+                    type = 'error'
+                })
             end
         else
-            TriggerClientEvent('ox_lib:notify', src, { description = Lang:t('error.you_dont_have_enough_resealable_bags'), type = 'error' })
+            TriggerClientEvent('ox_lib:notify', src, {
+                description = Lang:t('error.you_dont_have_enough_resealable_bags'),
+                type = 'error'
+            })
         end
     else
-        TriggerClientEvent('ox_lib:notify', src, { description = Lang:t('error.you_dont_have_enough_resealable_bags'), type = 'error' })
+        TriggerClientEvent('ox_lib:notify', src, {
+            description = Lang:t('error.you_dont_have_enough_resealable_bags'),
+            type = 'error'
+        })
     end
 end)
 
 RegisterNetEvent('qb-weed:server:foodPlant', function(house, amount, plantName, plantId)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local plantStats = MySQL.query.await('SELECT * FROM house_plants WHERE building = ? AND sort = ? AND plantid = ?', { house, plantName, tostring(plantId) })
+    local plantStats = MySQL.single.await('SELECT * FROM house_plants WHERE building = ? AND sort = ? AND plantid = ?', {
+        house,
+        plantName,
+        tostring(plantId)
+    })
 
-    TriggerClientEvent('ox_lib:notify', src, { description = QBWeed.Plants[plantName]["label"] .. ' | Nutrition: ' .. plantStats[1].food .. '% + ' .. amount .. '% (' .. (plantStats[1].food + amount) .. '%)', type = 'inform' })
+    TriggerClientEvent('ox_lib:notify', src, {
+        description = Config.Plants[plantName].label .. ' | Nutrition: ' .. plantStats.food .. '% + ' .. amount .. '% (' .. (plantStats.food + amount) .. '%)',
+        type = 'inform'
+    })
 
-    if plantStats[1].food + amount > 100 then
-        MySQL.update('UPDATE house_plants SET food = ? WHERE building = ? AND plantid = ?', { 100, house, plantId })
+    if plantStats.food + amount > 100 then
+        MySQL.update('UPDATE house_plants SET food = ? WHERE building = ? AND plantid = ?', {
+            100,
+            house,
+            plantId
+        })
     else
-        MySQL.update('UPDATE house_plants SET food = ? WHERE building = ? AND plantid = ?', { (plantStats[1].food + amount), house, plantId })
+        MySQL.update('UPDATE house_plants SET food = ? WHERE building = ? AND plantid = ?', {
+            plantStats.food + amount,
+            house,
+            plantId
+        })
     end
 
     Player.Functions.RemoveItem('weed_nutrition', 1)

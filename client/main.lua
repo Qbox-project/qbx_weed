@@ -4,7 +4,7 @@ local insideHouse = false
 local currentHouse = nil
 local plantSpawned = false
 
-DrawText3Ds = function(x, y, z, text)
+local function DrawText3Ds(x, y, z, text)
     SetTextScale(0.35, 0.35)
     SetTextFont(4)
     SetTextColour(255, 255, 255, 215)
@@ -40,7 +40,7 @@ function spawnHousePlants()
                         y = json.decode(housePlants[currentHouse][k].coords).y,
                         z = json.decode(housePlants[currentHouse][k].coords).z
                     },
-                    plantProp = joaat(QBWeed.Plants[housePlants[currentHouse][k].sort]["stages"][housePlants[currentHouse][k].stage])
+                    plantProp = joaat(Config.Plants[housePlants[currentHouse][k].sort]["stages"][housePlants[currentHouse][k].stage])
                 }
 
                 local plantProp = CreateObject(plantData["plantProp"], plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], false, false, false)
@@ -74,9 +74,9 @@ function despawnHousePlants()
                     }
                 }
 
-                for _, stage in pairs(QBWeed.Plants[housePlants[currentHouse][k].sort]["stages"]) do
+                for _, stage in pairs(Config.Plants[housePlants[currentHouse][k].sort]["stages"]) do
                     local closestPlant = GetClosestObjectOfType(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], 3.5, joaat(stage), false, false, false)
-                    
+
                     if closestPlant ~= 0 then
                         DeleteObject(closestPlant)
                     end
@@ -92,8 +92,6 @@ local ClosestTarget = 0
 
 CreateThread(function()
     while true do
-        Wait(0)
-
         if insideHouse then
             if plantSpawned then
                 for k, _ in pairs(housePlants[currentHouse]) do
@@ -110,17 +108,17 @@ CreateThread(function()
                             ["z"] = json.decode(housePlants[currentHouse][k].coords).z
                         },
                         ["plantStage"] = housePlants[currentHouse][k].stage,
-                        ["plantProp"] = joaat(QBWeed.Plants[housePlants[currentHouse][k].sort]["stages"][housePlants[currentHouse][k].stage]),
+                        ["plantProp"] = joaat(Config.Plants[housePlants[currentHouse][k].sort]["stages"][housePlants[currentHouse][k].stage]),
                         ["plantSort"] = {
                             ["name"] = housePlants[currentHouse][k].sort,
-                            ["label"] = QBWeed.Plants[housePlants[currentHouse][k].sort]["label"],
+                            ["label"] = Config.Plants[housePlants[currentHouse][k].sort]["label"],
                         },
                         ["plantStats"] = {
                             ["food"] = housePlants[currentHouse][k].food,
                             ["health"] = housePlants[currentHouse][k].health,
                             ["progress"] = housePlants[currentHouse][k].progress,
                             ["stage"] = housePlants[currentHouse][k].stage,
-                            ["highestStage"] = QBWeed.Plants[housePlants[currentHouse][k].sort]["highestStage"],
+                            ["highestStage"] = Config.Plants[housePlants[currentHouse][k].sort]["highestStage"],
                             ["gender"] = gender,
                             ["plantId"] = housePlants[currentHouse][k].plantid
                         }
@@ -210,6 +208,8 @@ CreateThread(function()
 
         if not insideHouse then
             Wait(5000)
+        else
+            Wait(0)
         end
     end
 end)
@@ -258,17 +258,17 @@ end)
 RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
     local plyCoords = GetOffsetFromEntityInWorldCoords(cache.ped, 0, 0.75, 0)
     local plantData = {
-        ["plantCoords"] = {
-            ["x"] = plyCoords.x,
-            ["y"] = plyCoords.y,
-            ["z"] = plyCoords.z
+        plantCoords = {
+            x = plyCoords.x,
+            y = plyCoords.y,
+            z = plyCoords.z
         },
-        ["plantModel"] = QBWeed.Plants[type]["stages"]["stage-a"],
-        ["plantLabel"] = QBWeed.Plants[type]["label"]
+        plantModel = Config.Plants[type].stages['stage-a'],
+        plantLabel = Config.Plants[type].label
     }
     local ClosestPlant = 0
 
-    for _, v in pairs(QBWeed.Props) do
+    for _, v in pairs(Config.Props) do
         if ClosestPlant == 0 then
             ClosestPlant = GetClosestObjectOfType(plyCoords.x, plyCoords.y, plyCoords.z, 0.8, joaat(v), false, false, false)
         end
@@ -276,8 +276,6 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
 
     if currentHouse ~= nil then
         if ClosestPlant == 0 then
-            LocalPlayer.state:set("inv_busy", true, true)
-
             if lib.progressCircle({
                 duration = 8000,
                 position = 'bottom',
@@ -297,14 +295,12 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
             }) then
                 ClearPedTasks(cache.ped)
 
-                TriggerServerEvent('qb-weed:server:placePlant', json.encode(plantData["plantCoords"]), type, currentHouse)
+                TriggerServerEvent('qb-weed:server:placePlant', json.encode(plantData.plantCoords), type, currentHouse)
                 TriggerServerEvent('qb-weed:server:removeSeed', item.slot, type)
             else
                 ClearPedTasks(cache.ped)
 
                 lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
-
-                LocalPlayer.state:set("inv_busy", false, true)
             end
         else
             lib.notify({ description = Lang:t("error.cant_place_here"), type = 'error' })
@@ -324,25 +320,25 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
             end
 
             local plantData = {
-                ["plantCoords"] = {
-                    ["x"] = json.decode(housePlants[currentHouse][ClosestTarget].coords).x,
-                    ["y"] = json.decode(housePlants[currentHouse][ClosestTarget].coords).y,
-                    ["z"] = json.decode(housePlants[currentHouse][ClosestTarget].coords).z
+                plantCoords = {
+                    x = json.decode(housePlants[currentHouse][ClosestTarget].coords).x,
+                    y = json.decode(housePlants[currentHouse][ClosestTarget].coords).y,
+                    z = json.decode(housePlants[currentHouse][ClosestTarget].coords).z
                 },
-                ["plantStage"] = housePlants[currentHouse][ClosestTarget].stage,
-                ["plantProp"] = joaat(QBWeed.Plants[housePlants[currentHouse][ClosestTarget].sort]["stages"][housePlants[currentHouse][ClosestTarget].stage]),
-                ["plantSort"] = {
-                    ["name"] = housePlants[currentHouse][ClosestTarget].sort,
-                    ["label"] = QBWeed.Plants[housePlants[currentHouse][ClosestTarget].sort]["label"]
+                plantStage = housePlants[currentHouse][ClosestTarget].stage,
+                plantProp = joaat(Config.Plants[housePlants[currentHouse][ClosestTarget].sort]["stages"][housePlants[currentHouse][ClosestTarget].stage]),
+                plantSort = {
+                    name = housePlants[currentHouse][ClosestTarget].sort,
+                    label = Config.Plants[housePlants[currentHouse][ClosestTarget].sort]["label"]
                 },
-                ["plantStats"] = {
-                    ["food"] = housePlants[currentHouse][ClosestTarget].food,
-                    ["health"] = housePlants[currentHouse][ClosestTarget].health,
-                    ["progress"] = housePlants[currentHouse][ClosestTarget].progress,
-                    ["stage"] = housePlants[currentHouse][ClosestTarget].stage,
-                    ["highestStage"] = QBWeed.Plants[housePlants[currentHouse][ClosestTarget].sort]["highestStage"],
-                    ["gender"] = gender,
-                    ["plantId"] = housePlants[currentHouse][ClosestTarget].plantid
+                plantStats = {
+                    food = housePlants[currentHouse][ClosestTarget].food,
+                    health = housePlants[currentHouse][ClosestTarget].health,
+                    progress = housePlants[currentHouse][ClosestTarget].progress,
+                    stage = housePlants[currentHouse][ClosestTarget].stage,
+                    highestStage = Config.Plants[housePlants[currentHouse][ClosestTarget].sort]["highestStage"],
+                    gender = gender,
+                    plantId = housePlants[currentHouse][ClosestTarget].plantid
                 }
             }
             local plyDistance = #(GetEntityCoords(cache.ped) - vec3(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"]))
@@ -351,8 +347,6 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
                 if plantData["plantStats"]["food"] == 100 then
                     QBCore.Functions.Notify(Lang:t('error.not_need_nutrition'), 'error', 3500)
                 else
-                    LocalPlayer.state:set("inv_busy", true, true)
-
                     if lib.progressCircle({
                         duration = math.random(4000, 8000),
                         position = 'bottom',
@@ -377,8 +371,6 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
                         TriggerServerEvent('qb-weed:server:foodPlant', currentHouse, newFood, plantData["plantSort"]["name"], plantData["plantStats"]["plantId"])
                     else
                         ClearPedTasks(cache.ped)
-
-                        LocalPlayer.state:set("inv_busy", false, true)
 
                         lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
                     end

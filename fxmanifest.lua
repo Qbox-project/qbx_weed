@@ -1,14 +1,11 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-Weed'
-version '1.0.0'
-
 shared_scripts {
-    'config.lua',
     '@qb-core/shared/locale.lua',
     'locales/en.lua',
-    '@ox_lib/init.lua'
+    '@ox_lib/init.lua',
+    'config.lua'
 }
 
 server_scripts {
