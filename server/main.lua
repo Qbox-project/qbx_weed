@@ -84,24 +84,46 @@ CreateThread(function()
                 local Grow = math.random(1, 3)
 
                 if housePlants[k].progress + Grow < 100 then
-                    MySQL.update('UPDATE house_plants SET progress = ? WHERE plantid = ?', { (housePlants[k].progress + Grow), housePlants[k].plantid })
+                    MySQL.update('UPDATE house_plants SET progress = ? WHERE plantid = ?', {
+                        (housePlants[k].progress + Grow),
+                        housePlants[k].plantid
+                    })
                 elseif housePlants[k].progress + Grow >= 100 then
-                    if housePlants[k].stage ~= Config.Plants[housePlants[k].sort]["highestStage"] then
+                    if housePlants[k].stage ~= Config.Plants[housePlants[k].sort].highestStage then
                         if housePlants[k].stage == "stage-a" then
-                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', { 'stage-b', housePlants[k].plantid })
+                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', {
+                                'stage-b', housePlants[k].plantid })
                         elseif housePlants[k].stage == "stage-b" then
-                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', { 'stage-c', housePlants[k].plantid })
+                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', {
+                                'stage-c',
+                                housePlants[k].plantid
+                            })
                         elseif housePlants[k].stage == "stage-c" then
-                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', { 'stage-d', housePlants[k].plantid })
+                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', {
+                                'stage-d',
+                                housePlants[k].plantid
+                            })
                         elseif housePlants[k].stage == "stage-d" then
-                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', { 'stage-e', housePlants[k].plantid })
+                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', {
+                                'stage-e',
+                                housePlants[k].plantid
+                            })
                         elseif housePlants[k].stage == "stage-e" then
-                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', { 'stage-f', housePlants[k].plantid })
+                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', {
+                                'stage-f',
+                                housePlants[k].plantid
+                            })
                         elseif housePlants[k].stage == "stage-f" then
-                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', { 'stage-g', housePlants[k].plantid })
+                            MySQL.update('UPDATE house_plants SET stage = ? WHERE plantid = ?', {
+                                'stage-g',
+                                housePlants[k].plantid
+                            })
                         end
 
-                        MySQL.update('UPDATE house_plants SET progress = ? WHERE plantid = ?', { 0, housePlants[k].plantid })
+                        MySQL.update('UPDATE house_plants SET progress = ? WHERE plantid = ?', {
+                            0,
+                            housePlants[k].plantid
+                        })
                     end
                 end
             end
@@ -126,6 +148,10 @@ end)
 RegisterNetEvent('qb-weed:server:removeSeed', function(itemslot, seed)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
+
+    if not Player then
+        return
+    end
 
     Player.Functions.RemoveItem(seed, 1, itemslot)
 end)
@@ -155,7 +181,10 @@ RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantNam
                     })
 
                     TriggerClientEvent('QBCore:Notify', src, Lang:t('text.the_plant_has_been_harvested'), 'success', 3500)
-                    TriggerClientEvent('ox_lib:notify', src, { description = Lang:t('text.the_plant_has_been_harvested'), type = 'success' })
+                    TriggerClientEvent('ox_lib:notify', src, {
+                        description = Lang:t('text.the_plant_has_been_harvested'),
+                        type = 'success'
+                    })
                     TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, house)
                 else
                     TriggerClientEvent('ox_lib:notify', src, {

@@ -137,7 +137,7 @@ CreateThread(function()
                                 DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"],plantData["plantCoords"]["z"], Lang:t('text.sort') .. ' ~g~' .. plantData["plantSort"]["label"] .. '~w~ [' .. plantData["plantStats"]["gender"] .. '] | ' .. Lang:t('text.nutrition') .. ' ~b~' .. plantData["plantStats"]["food"] .. '% ~w~ | ' .. Lang:t('text.health') .. ' ~b~' .. plantData["plantStats"]["health"] .. '%')
 
                                 if IsControlJustPressed(0, 38) then
-                                    if lib.progressCircle({
+                                    if lib.progressBar({
                                         duration = 8000,
                                         position = 'bottom',
                                         label = Lang:t('text.harvesting_plant'),
@@ -166,7 +166,10 @@ CreateThread(function()
                                     else
                                         ClearPedTasks(cache.ped)
 
-                                        lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
+                                        lib.notify({
+                                            description = Lang:t("error.process_canceled"),
+                                            type = 'error'
+                                        })
                                     end
                                 end
                             end
@@ -174,7 +177,7 @@ CreateThread(function()
                             DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], Lang:t('error.plant_has_died'))
 
                             if IsControlJustPressed(0, 38) then
-                                if lib.progressCircle({
+                                if lib.progressBar({
                                     duration = 8000,
                                     position = 'bottom',
                                     label = Lang:t('text.removing_the_plant'),
@@ -197,7 +200,10 @@ CreateThread(function()
                                 else
                                     ClearPedTasks(cache.ped)
 
-                                    lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
+                                    lib.notify({
+                                        description = Lang:t("error.process_canceled"),
+                                        type = 'error'
+                                    })
                                 end
                             end
                         end
@@ -276,7 +282,7 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
 
     if currentHouse ~= nil then
         if ClosestPlant == 0 then
-            if lib.progressCircle({
+            if lib.progressBar({
                 duration = 8000,
                 position = 'bottom',
                 label = Lang:t('text.planting'),
@@ -300,13 +306,22 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
             else
                 ClearPedTasks(cache.ped)
 
-                lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
+                lib.notify({
+                    description = Lang:t("error.process_canceled"),
+                    type = 'error'
+                })
             end
         else
-            lib.notify({ description = Lang:t("error.cant_place_here"), type = 'error' })
+            lib.notify({
+                description = Lang:t("error.cant_place_here"),
+                type = 'error'
+            })
         end
     else
-        lib.notify({ description = Lang:t("error.not_safe_here"), type = 'error' })
+        lib.notify({
+            description = Lang:t("error.not_safe_here"),
+            type = 'error'
+        })
     end
 end)
 
@@ -326,28 +341,28 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
                     z = json.decode(housePlants[currentHouse][ClosestTarget].coords).z
                 },
                 plantStage = housePlants[currentHouse][ClosestTarget].stage,
-                plantProp = joaat(Config.Plants[housePlants[currentHouse][ClosestTarget].sort]["stages"][housePlants[currentHouse][ClosestTarget].stage]),
+                plantProp = joaat(Config.Plants[housePlants[currentHouse][ClosestTarget].sort].stages[housePlants[currentHouse][ClosestTarget].stage]),
                 plantSort = {
                     name = housePlants[currentHouse][ClosestTarget].sort,
-                    label = Config.Plants[housePlants[currentHouse][ClosestTarget].sort]["label"]
+                    label = Config.Plants[housePlants[currentHouse][ClosestTarget].sort].label
                 },
                 plantStats = {
                     food = housePlants[currentHouse][ClosestTarget].food,
                     health = housePlants[currentHouse][ClosestTarget].health,
                     progress = housePlants[currentHouse][ClosestTarget].progress,
                     stage = housePlants[currentHouse][ClosestTarget].stage,
-                    highestStage = Config.Plants[housePlants[currentHouse][ClosestTarget].sort]["highestStage"],
+                    highestStage = Config.Plants[housePlants[currentHouse][ClosestTarget].sort].highestStage,
                     gender = gender,
                     plantId = housePlants[currentHouse][ClosestTarget].plantid
                 }
             }
-            local plyDistance = #(GetEntityCoords(cache.ped) - vec3(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"]))
+            local plyDistance = #(GetEntityCoords(cache.ped) - vec3(plantData.plantCoords.x, plantData.plantCoords.y, plantData.plantCoords.z))
 
             if plyDistance < 1.0 then
-                if plantData["plantStats"]["food"] == 100 then
+                if plantData.plantStats.food == 100 then
                     QBCore.Functions.Notify(Lang:t('error.not_need_nutrition'), 'error', 3500)
                 else
-                    if lib.progressCircle({
+                    if lib.progressBar({
                         duration = math.random(4000, 8000),
                         position = 'bottom',
                         label = Lang:t('text.feeding_plant'),
@@ -368,18 +383,27 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
 
                         local newFood = math.random(40, 60)
 
-                        TriggerServerEvent('qb-weed:server:foodPlant', currentHouse, newFood, plantData["plantSort"]["name"], plantData["plantStats"]["plantId"])
+                        TriggerServerEvent('qb-weed:server:foodPlant', currentHouse, newFood, plantData.plantSort.name, plantData.plantStats.plantId)
                     else
                         ClearPedTasks(cache.ped)
 
-                        lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
+                        lib.notify({
+                            description = Lang:t("error.process_canceled"),
+                            type = 'error'
+                        })
                     end
                 end
             else
-                lib.notify({ description = Lang:t("error.cant_place_here"), type = 'error' })
+                lib.notify({
+                    description = Lang:t("error.cant_place_here"),
+                    type = 'error'
+                })
             end
         else
-            lib.notify({ description = Lang:t("error.not_safe_here"), type = 'error' })
+            lib.notify({
+                description = Lang:t("error.not_safe_here"),
+                type = 'error'
+            })
         end
     end
 end)
