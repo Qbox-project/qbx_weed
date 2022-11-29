@@ -224,7 +224,7 @@ RegisterNetEvent('qb-weed:client:leaveHouse', function()
     despawnHousePlants()
 
     SetTimeout(1000, function()
-        if currentHouse ~= nil then
+        if currentHouse then
             insideHouse = false
             housePlants[currentHouse] = nil
             currentHouse = nil
@@ -233,7 +233,7 @@ RegisterNetEvent('qb-weed:client:leaveHouse', function()
 end)
 
 RegisterNetEvent('qb-weed:client:refreshHousePlants', function(house)
-    if currentHouse ~= nil and currentHouse == house then
+    if currentHouse and currentHouse == house then
         despawnHousePlants()
 
         SetTimeout(100, function()
@@ -280,7 +280,7 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
         end
     end
 
-    if currentHouse ~= nil then
+    if currentHouse then
         if ClosestPlant == 0 then
             if lib.progressBar({
                 duration = 8000,
@@ -326,7 +326,7 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
 end)
 
 RegisterNetEvent('qb-weed:client:foodPlant', function()
-    if currentHouse ~= nil then
+    if currentHouse then
         if ClosestTarget ~= 0 then
             local gender = "M"
 
@@ -360,7 +360,11 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
 
             if plyDistance < 1.0 then
                 if plantData.plantStats.food == 100 then
-                    QBCore.Functions.Notify(Lang:t('error.not_need_nutrition'), 'error', 3500)
+                    lib.notify({
+                        description = Lang:t('error.not_need_nutrition'),
+                        duration = 3500,
+                        type = 'error'
+                    })
                 else
                     if lib.progressBar({
                         duration = math.random(4000, 8000),

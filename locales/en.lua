@@ -7,7 +7,7 @@ local Translations = {
         not_need_nutrition = "The Plant Does Not Need Nutrition",
         this_plant_no_longer_exists = "This plant no longer exists?",
         house_not_found = "House Not Found",
-        you_dont_have_enough_resealable_bags = "You Don't Have Enough Resealable Bags",
+        you_dont_have_enough_resealable_bags = "You Don't Have Enough Resealable Bags"
     },
     text = {
         sort = 'Sort:',
@@ -18,8 +18,8 @@ local Translations = {
         planting = "Planting",
         feeding_plant = "Feeding Plant",
         the_plant_has_been_harvested = "The plant has been harvested",
-        removing_the_plant = "Removing The Plant",
-    },
+        removing_the_plant = "Removing The Plant"
+    }
 }
 
 Lang = Locale:new({

@@ -8,7 +8,7 @@ QBCore.Functions.CreateCallback('qb-weed:server:getBuildingPlants', function(_, 
             buildingPlants[#buildingPlants + 1] = plants[i]
         end
 
-        if buildingPlants ~= nil then
+        if buildingPlants then
             cb(buildingPlants)
         else
             cb(nil)
@@ -162,15 +162,15 @@ RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantNam
     local weedBag = Player.Functions.GetItemByName('empty_weed_bag')
     local sndAmount = math.random(12, 16)
 
-    if weedBag ~= nil then
+    if weedBag then
         if weedBag.amount >= sndAmount then
-            if house ~= nil then
-                local result = MySQL.query.await('SELECT * FROM house_plants WHERE plantid = ? AND building = ?', {
+            if house then
+                local result = MySQL.single.await('SELECT * FROM house_plants WHERE plantid = ? AND building = ?', {
                     plantId,
                     house
                 })
 
-                if result[1] ~= nil then
+                if result then
                     Player.Functions.AddItem('weed_' .. plantName .. '_seed', amount)
                     Player.Functions.AddItem('weed_' .. plantName, sndAmount)
                     Player.Functions.RemoveItem('empty_weed_bag', sndAmount)
