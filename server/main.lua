@@ -180,9 +180,9 @@ RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantNam
                         house
                     })
 
-                    TriggerClientEvent('QBCore:Notify', src, Lang:t('text.the_plant_has_been_harvested'), 'success', 3500)
                     TriggerClientEvent('ox_lib:notify', src, {
                         description = Lang:t('text.the_plant_has_been_harvested'),
+                        duration = 3500,
                         type = 'success'
                     })
                     TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, house)
