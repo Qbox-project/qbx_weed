@@ -3,6 +3,7 @@ local housePlants = {}
 local insideHouse = false
 local currentHouse = nil
 local plantSpawned = false
+local ClosestTarget = 0
 
 local function DrawText3Ds(x, y, z, text)
     SetTextScale(0.35, 0.35)
@@ -40,10 +41,10 @@ function spawnHousePlants()
                         y = json.decode(housePlants[currentHouse][k].coords).y,
                         z = json.decode(housePlants[currentHouse][k].coords).z
                     },
-                    plantProp = joaat(Config.Plants[housePlants[currentHouse][k].sort]["stages"][housePlants[currentHouse][k].stage])
+                    plantProp = joaat(Config.Plants[housePlants[currentHouse][k].sort].stages[housePlants[currentHouse][k].stage])
                 }
 
-                local plantProp = CreateObject(plantData["plantProp"], plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], false, false, false)
+                local plantProp = CreateObject(plantData.plantProp, plantData.plantCoords.x, plantData.plantCoords.y, plantData.plantCoords.z, false, false, false)
 
                 while not plantProp do
                     Wait(0)
@@ -67,15 +68,15 @@ function despawnHousePlants()
         if plantSpawned then
             for k, _ in pairs(housePlants[currentHouse]) do
                 local plantData = {
-                    ["plantCoords"] = {
-                        ["x"] = json.decode(housePlants[currentHouse][k].coords).x,
-                        ["y"] = json.decode(housePlants[currentHouse][k].coords).y,
-                        ["z"] = json.decode(housePlants[currentHouse][k].coords).z
+                    plantCoords = {
+                        x = json.decode(housePlants[currentHouse][k].coords).x,
+                        y = json.decode(housePlants[currentHouse][k].coords).y,
+                        z = json.decode(housePlants[currentHouse][k].coords).z
                     }
                 }
 
-                for _, stage in pairs(Config.Plants[housePlants[currentHouse][k].sort]["stages"]) do
-                    local closestPlant = GetClosestObjectOfType(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], 3.5, joaat(stage), false, false, false)
+                for _, stage in pairs(Config.Plants[housePlants[currentHouse][k].sort].stages) do
+                    local closestPlant = GetClosestObjectOfType(plantData.plantCoords.x, plantData.plantCoords.y, plantData.plantCoords.z, 3.5, joaat(stage), false, false, false)
 
                     if closestPlant ~= 0 then
                         DeleteObject(closestPlant)
@@ -87,8 +88,6 @@ function despawnHousePlants()
         end
     end)
 end
-
-local ClosestTarget = 0
 
 CreateThread(function()
     while true do
@@ -102,39 +101,39 @@ CreateThread(function()
                     end
 
                     local plantData = {
-                        ["plantCoords"] = {
-                            ["x"] = json.decode(housePlants[currentHouse][k].coords).x,
-                            ["y"] = json.decode(housePlants[currentHouse][k].coords).y,
-                            ["z"] = json.decode(housePlants[currentHouse][k].coords).z
+                        plantCoords = {
+                            x = json.decode(housePlants[currentHouse][k].coords).x,
+                            y = json.decode(housePlants[currentHouse][k].coords).y,
+                            z = json.decode(housePlants[currentHouse][k].coords).z
                         },
-                        ["plantStage"] = housePlants[currentHouse][k].stage,
-                        ["plantProp"] = joaat(Config.Plants[housePlants[currentHouse][k].sort]["stages"][housePlants[currentHouse][k].stage]),
-                        ["plantSort"] = {
-                            ["name"] = housePlants[currentHouse][k].sort,
-                            ["label"] = Config.Plants[housePlants[currentHouse][k].sort]["label"],
+                        plantStage = housePlants[currentHouse][k].stage,
+                        plantProp = joaat(Config.Plants[housePlants[currentHouse][k].sort].stages[housePlants[currentHouse][k].stage]),
+                        plantSort = {
+                            name = housePlants[currentHouse][k].sort,
+                            label = Config.Plants[housePlants[currentHouse][k].sort].label,
                         },
-                        ["plantStats"] = {
-                            ["food"] = housePlants[currentHouse][k].food,
-                            ["health"] = housePlants[currentHouse][k].health,
-                            ["progress"] = housePlants[currentHouse][k].progress,
-                            ["stage"] = housePlants[currentHouse][k].stage,
-                            ["highestStage"] = Config.Plants[housePlants[currentHouse][k].sort]["highestStage"],
-                            ["gender"] = gender,
-                            ["plantId"] = housePlants[currentHouse][k].plantid
+                        plantStats = {
+                            food = housePlants[currentHouse][k].food,
+                            health = housePlants[currentHouse][k].health,
+                            progress = housePlants[currentHouse][k].progress,
+                            stage = housePlants[currentHouse][k].stage,
+                            highestStage = Config.Plants[housePlants[currentHouse][k].sort].highestStage,
+                            gender = gender,
+                            plantId = housePlants[currentHouse][k].plantid
                         }
                     }
 
-                    local plyDistance = #(GetEntityCoords(cache.ped) - vec3(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"]))
+                    local plyDistance = #(GetEntityCoords(cache.ped) - vec3(plantData.plantCoords.x, plantData.plantCoords.y, plantData.plantCoords.z))
 
                     if plyDistance < 0.8 then
                         ClosestTarget = k
 
-                        if plantData["plantStats"]["health"] > 0 then
-                            if plantData["plantStage"] ~= plantData["plantStats"]["highestStage"] then
-                                DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], Lang:t('text.sort') .. plantData["plantSort"]["label"] .. '~w~ [' .. plantData["plantStats"]["gender"] .. '] | ' .. Lang:t('text.nutrition') .. ' ~b~' .. plantData["plantStats"]["food"] .. '% ~w~ | ' .. Lang:t('text.health') .. ' ~b~' .. plantData["plantStats"]["health"] .. '%')
+                        if plantData.plantStats.health > 0 then
+                            if plantData.plantStage ~= plantData.plantStats.highestStage then
+                                DrawText3Ds(plantData.plantCoords.x, plantData.plantCoords.y, plantData.plantCoords.z, Lang:t('text.sort') .. plantData.plantSort.label .. '~w~ [' .. plantData.plantStats.gender .. '] | ' .. Lang:t('text.nutrition') .. ' ~b~' .. plantData.plantStats.food .. '% ~w~ | ' .. Lang:t('text.health') .. ' ~b~' .. plantData.plantStats.health .. '%')
                             else
-                                DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"] + 0.2, Lang:t('text.harvest_plant'))
-                                DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"],plantData["plantCoords"]["z"], Lang:t('text.sort') .. ' ~g~' .. plantData["plantSort"]["label"] .. '~w~ [' .. plantData["plantStats"]["gender"] .. '] | ' .. Lang:t('text.nutrition') .. ' ~b~' .. plantData["plantStats"]["food"] .. '% ~w~ | ' .. Lang:t('text.health') .. ' ~b~' .. plantData["plantStats"]["health"] .. '%')
+                                DrawText3Ds(plantData.plantCoords.x, plantData.plantCoords.y, plantData.plantCoords.z + 0.2, Lang:t('text.harvest_plant'))
+                                DrawText3Ds(plantData.plantCoords.x, plantData.plantCoords.y,plantData.plantCoords.z, Lang:t('text.sort') .. ' ~g~' .. plantData.plantSort.label .. '~w~ [' .. plantData.plantStats.gender .. '] | ' .. Lang:t('text.nutrition') .. ' ~b~' .. plantData.plantStats.food .. '% ~w~ | ' .. Lang:t('text.health') .. ' ~b~' .. plantData.plantStats.health .. '%')
 
                                 if IsControlJustPressed(0, 38) then
                                     if lib.progressBar({
@@ -146,7 +145,6 @@ CreateThread(function()
                                         disable = {
                                             move = true,
                                             car = true,
-                                            mouse = false,
                                             combat = true
                                         },
                                         anim = {
@@ -158,11 +156,11 @@ CreateThread(function()
 
                                         local amount = math.random(1, 6)
 
-                                        if plantData["plantStats"]["gender"] == "M" then
+                                        if plantData.plantStats.gender == "M" then
                                             amount = math.random(1, 2)
                                         end
 
-                                        TriggerServerEvent('qb-weed:server:harvestPlant', currentHouse, amount, plantData["plantSort"]["name"], plantData["plantStats"]["plantId"])
+                                        TriggerServerEvent('qb-weed:server:harvestPlant', currentHouse, amount, plantData.plantSort.name, plantData.plantStats.plantId)
                                     else
                                         ClearPedTasks(cache.ped)
 
@@ -173,8 +171,8 @@ CreateThread(function()
                                     end
                                 end
                             end
-                        elseif plantData["plantStats"]["health"] == 0 then
-                            DrawText3Ds(plantData["plantCoords"]["x"], plantData["plantCoords"]["y"], plantData["plantCoords"]["z"], Lang:t('error.plant_has_died'))
+                        elseif plantData.plantStats.health == 0 then
+                            DrawText3Ds(plantData.plantCoords.x, plantData.plantCoords.y, plantData.plantCoords.z, Lang:t('error.plant_has_died'))
 
                             if IsControlJustPressed(0, 38) then
                                 if lib.progressBar({
@@ -186,7 +184,6 @@ CreateThread(function()
                                     disable = {
                                         move = true,
                                         car = true,
-                                        mouse = false,
                                         combat = true
                                     },
                                     anim = {
@@ -196,7 +193,7 @@ CreateThread(function()
                                 }) then
                                     ClearPedTasks(cache.ped)
 
-                                    TriggerServerEvent('qb-weed:server:removeDeathPlant', currentHouse, plantData["plantStats"]["plantId"])
+                                    TriggerServerEvent('qb-weed:server:removeDeathPlant', currentHouse, plantData.plantStats.plantId)
                                 else
                                     ClearPedTasks(cache.ped)
 
@@ -291,7 +288,6 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
                 disable = {
                     move = true,
                     car = true,
-                    mouse = false,
                     combat = true
                 },
                 anim = {
@@ -375,7 +371,6 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
                         disable = {
                             move = true,
                             car = true,
-                            mouse = false,
                             combat = true
                         },
                         anim = {
