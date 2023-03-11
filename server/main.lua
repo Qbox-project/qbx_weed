@@ -6,7 +6,12 @@ QBCore.Functions.CreateCallback('qb-weed:server:getBuildingPlants', function(_, 
     local plants = MySQL.query.await('SELECT * FROM house_plants WHERE building = ?', { building })
 
     for i = 1, #plants, 1 do
-        buildingPlants[#buildingPlants + 1] = plants[i]
+        local plant = plants[i]
+        if type(plant.coords) == 'string' then
+            plant.coords = json.decode(plant.coords)
+            plant.coords = vec3(plant.coords.x, plant.coords.y, plant.coords.z)
+        end
+        buildingPlants[#buildingPlants + 1] = plant
     end
 
     cb(buildingPlants)
@@ -18,7 +23,7 @@ RegisterNetEvent('qb-weed:server:placePlant', function(coords, sort, currentHous
     if random == 1 then
         gender = "man"
     end
-    MySQL.insert.await('INSERT INTO house_plants (building, coords, gender, sort, plantid) VALUES (?, ?, ?, ?, ?)', { currentHouse, coords, gender, sort, math.random(111111, 999999) })
+    MySQL.insert.await('INSERT INTO house_plants (building, coords, gender, sort, plantid) VALUES (?, ?, ?, ?, ?)', { currentHouse, json.encode(coords), gender, sort, math.random(111111, 999999) })
     TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, currentHouse)
 end)
 
