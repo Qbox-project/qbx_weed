@@ -53,7 +53,7 @@ end
 local function manageHousePlants()
     while true do
         local housePlants = MySQL.query.await('SELECT * FROM house_plants', {})
-        for i in #housePlants do
+        for i=1, #housePlants do
             checkHousePlantFood(housePlants[i])
         end
         TriggerClientEvent('qb-weed:client:refreshPlantStats', -1)
@@ -86,8 +86,8 @@ end
 local function updatePlantGrowth()
     while true do
         local housePlants = MySQL.query.await('SELECT * FROM house_plants', {})
-        for k in #housePlants do
-            growPlant(housePlants[k])
+        for i=1, #housePlants do
+            growPlant(housePlants[i])
         end
         TriggerClientEvent('qb-weed:client:refreshPlantStats', -1)
         Wait((60 * 1000) * 9.6)
