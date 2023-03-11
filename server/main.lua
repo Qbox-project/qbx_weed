@@ -87,7 +87,6 @@ local function updatePlantGrowth()
     while true do
         local housePlants = MySQL.query.await('SELECT * FROM house_plants', {})
         for i=1, #housePlants do
-            print(i)
             growPlant(housePlants[i])
         end
         TriggerClientEvent('qb-weed:client:refreshPlantStats', -1)
