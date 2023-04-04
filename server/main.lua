@@ -1,4 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore = exports['qbx-core']:GetCoreObject()
 
 QBCore.Functions.CreateCallback('qb-weed:server:getBuildingPlants', function(_, cb, building)
     local buildingPlants = {}
