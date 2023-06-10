@@ -1,8 +1,7 @@
 local QBCore = exports['qbx-core']:GetCoreObject()
 
-QBCore.Functions.CreateCallback('qb-weed:server:getBuildingPlants', function(_, cb, building)
+lib.callback.register('qb-weed:server:getBuildingPlants', function(_, building)
     local buildingPlants = {}
-
     local plants = MySQL.query.await('SELECT * FROM house_plants WHERE building = ?', { building })
 
     for i = 1, #plants, 1 do
@@ -14,7 +13,7 @@ QBCore.Functions.CreateCallback('qb-weed:server:getBuildingPlants', function(_, 
         buildingPlants[#buildingPlants + 1] = plant
     end
 
-    cb(buildingPlants)
+    return buildingPlants
 end)
 
 RegisterNetEvent('qb-weed:server:placePlant', function(coords, sort, currentHouse)
