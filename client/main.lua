@@ -148,12 +148,11 @@ end
 CreateThread(updatePlants)
 
 RegisterNetEvent('qb-weed:client:getHousePlants', function(house)
-    QBCore.Functions.TriggerCallback('qb-weed:server:getBuildingPlants', function(plants)
-        currentHouse = house
-        housePlants[currentHouse] = plants
-        insideHouse = true
-        spawnPlants()
-    end, house)
+    local plants = lib.callback.await('qb-weed:server:getBuildingPlants', false, house)
+    currentHouse = house
+    housePlants[currentHouse] = plants
+    insideHouse = true
+    spawnPlants()
 end)
 
 RegisterNetEvent('qb-weed:client:leaveHouse', function()
@@ -169,21 +168,19 @@ RegisterNetEvent('qb-weed:client:refreshHousePlants', function(house)
     if not currentHouse or currentHouse ~= house then return end
     despawnPlants()
     Wait(1000)
-    QBCore.Functions.TriggerCallback('qb-weed:server:getBuildingPlants', function(plants)
-        currentHouse = house
-        housePlants[currentHouse] = plants
-        spawnPlants()
-    end, house)
+    local plants = lib.callback.await('qb-weed:server:getBuildingPlants', false, house)
+    currentHouse = house
+    housePlants[currentHouse] = plants
+    spawnPlants()
 end)
 
 RegisterNetEvent('qb-weed:client:refreshPlantStats', function()
     if not insideHouse then return end
     despawnPlants()
     Wait(1000)
-    QBCore.Functions.TriggerCallback('qb-weed:server:getBuildingPlants', function(plants)
-        housePlants[currentHouse] = plants
-        spawnPlants()
-    end, currentHouse)
+    local plants = lib.callback.await('qb-weed:server:getBuildingPlants', false, house)
+    housePlants[currentHouse] = plants
+    spawnPlants()
 end)
 
 RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
