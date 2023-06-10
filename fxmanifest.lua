@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-Weed'
+description 'QBX-Weed'
 version '1.0.0'
 
 shared_scripts {
@@ -18,4 +18,6 @@ server_scripts {
 
 client_script 'client/main.lua'
 
+provide 'qb-weed'
 lua54 'yes'
+use_experimental_fxv2_oal 'yes'
