@@ -194,7 +194,7 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
 
     if currentHouse then
         if closestPlant == 0 then
-            LocalPlayer.state:set("inv_busy", true, true)
+            LocalPlayer.state:set("invBusy", true, true)
             if lib.progressCircle({
                 duration = 8000,
                 position = 'bottom',
@@ -219,7 +219,7 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
             else
                 ClearPedTasks(cache.ped)
                 lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
-                LocalPlayer.state:set("inv_busy", false, true)
+                LocalPlayer.state:set("invBusy", false, true)
             end
         else
             lib.notify({ description = Lang:t("error.cant_place_here"), type = 'error' })
@@ -250,7 +250,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
         return
     end
 
-    LocalPlayer.state:set("inv_busy", true, true)
+    LocalPlayer.state:set("invBusy", true, true)
     if lib.progressCircle({
             duration = math.random(4000, 8000),
             position = 'bottom',
@@ -274,7 +274,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
         TriggerServerEvent('qb-weed:server:foodPlant', currentHouse, newFood, data.sort, data.plantid)
     else
         ClearPedTasks(cache.ped)
-        LocalPlayer.state:set("inv_busy", false, true)
+        LocalPlayer.state:set("invBusy", false, true)
         lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
     end
 end)
