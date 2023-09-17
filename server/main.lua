@@ -1,5 +1,3 @@
-local QBCore = exports['qbx-core']:GetCoreObject()
-
 lib.callback.register('qb-weed:server:getBuildingPlants', function(_, building)
     local buildingPlants = {}
     local plants = MySQL.query.await('SELECT * FROM house_plants WHERE building = ?', { building })

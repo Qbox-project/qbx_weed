@@ -1,24 +1,8 @@
-local QBCore = exports['qbx-core']:GetCoreObject()
 local housePlants = {}
 local insideHouse = false
 local currentHouse = nil
 local plantsSpawned = false
 local closestTarget = 0
-
-local function DrawText3D(x, y, z, text)
-    SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(true)
-    SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
-    SetTextCentre(true)
-    AddTextComponentString(text)
-    SetDrawOrigin(x, y, z, 0)
-    DrawText(0.0, 0.0)
-    local factor = (string.len(text)) / 370
-    DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
-    ClearDrawOrigin()
-end
 
 local function spawnPlants()
     if plantsSpawned then return end
@@ -65,10 +49,10 @@ local function updatePlantStats()
             closestTarget = k
             if v.health > 0 then
                 if v.stage ~= QBWeed.Plants[v.sort].highestStage then
-                    DrawText3D(v.coords.x, v.coords.y, v.coords.z,('%s%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), QBWeed.Plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health))
+                    DrawText3D(('%s%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), QBWeed.Plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health), v.coords)
                 else
-                    DrawText3D(v.coords.x, v.coords.y, v.coords.z + 0.2, Lang:t('text.harvest_plant'))
-                    DrawText3D(v.coords.x, v.coords.y, v.coords.z, ('%s ~g~%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), QBWeed.Plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health))
+                    DrawText3D(Lang:t('text.harvest_plant'), v.coords.x, v.coords.y, v.coords.z + 0.2)
+                    DrawText3D(('%s ~g~%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), QBWeed.Plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health), v.coords)
                     if IsControlJustPressed(0, 38) then
                         if lib.progressCircle({
                                 duration = 8000,
@@ -96,12 +80,12 @@ local function updatePlantStats()
                             TriggerServerEvent('qb-weed:server:harvestPlant', currentHouse, amount, v.sort, v.plantid)
                         else
                             ClearPedTasks(cache.ped)
-                            lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
+                            QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
                         end
                     end
                 end
             elseif v.health == 0 then
-                DrawText3D(v.coords.x, v.coords.y, v.coords.z, Lang:t('error.plant_has_died'))
+                DrawText3D(Lang:t('error.plant_has_died'), v.coords,)
                 if IsControlJustPressed(0, 38) then
                     if lib.progressCircle({
                             duration = 8000,
@@ -125,7 +109,7 @@ local function updatePlantStats()
                         TriggerServerEvent('qb-weed:server:removeDeathPlant', currentHouse, v.plantid)
                     else
                         ClearPedTasks(cache.ped)
-                        lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
+                        QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
                     end
                 end
             end
@@ -218,14 +202,14 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
                 TriggerServerEvent('qb-weed:server:removeSeed', item.slot, type)
             else
                 ClearPedTasks(cache.ped)
-                lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
+                QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
                 LocalPlayer.state:set("invBusy", false, true)
             end
         else
-            lib.notify({ description = Lang:t("error.cant_place_here"), type = 'error' })
+            QBCore.Functions.Notify(Lang:t('error.cant_place_here'), 'error')
         end
     else
-        lib.notify({ description = Lang:t("error.not_safe_here"), type = 'error' })
+        QBCore.Functions.Notify(Lang:t('error.not_safe_here'), 'error')
     end
 end)
 
@@ -233,7 +217,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     if not currentHouse then return end
 
     if closestTarget ~= 0 then
-        lib.notify({ description = Lang:t("error.not_safe_here"), type = 'error' })
+        QBCore.Functions.Notify(Lang:t('error.not_safe_here'), 'error')
         return
     end
 
@@ -241,12 +225,12 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     local plyDistance = #(GetEntityCoords(cache.ped) - data.coords)
 
     if plyDistance >= 1.0 then
-        lib.notify({ description = Lang:t("error.cant_place_here"), type = 'error' })
+        QBCore.Functions.Notify(Lang:t('error.cant_place_here'), 'error')
         return
     end
 
     if data.food == 100 then
-        lib.notify({ description = Lang:t('error.not_need_nutrition'), type = 'error' })
+        QBCore.Functions.Notify(Lang:t('error.not_need_nutrition'), 'error')
         return
     end
 
@@ -275,12 +259,11 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     else
         ClearPedTasks(cache.ped)
         LocalPlayer.state:set("invBusy", false, true)
-        lib.notify({ description = Lang:t("error.process_canceled"), type = 'error' })
+        QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
     end
 end)
 
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= GetCurrentResourceName() then return end
-
     despawnPlants()
 end)
