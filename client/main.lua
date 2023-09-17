@@ -85,7 +85,7 @@ local function updatePlantStats()
                     end
                 end
             elseif v.health == 0 then
-                DrawText3D(Lang:t('error.plant_has_died'), v.coords,)
+                DrawText3D(Lang:t('error.plant_has_died'), v.coords)
                 if IsControlJustPressed(0, 38) then
                     if lib.progressCircle({
                             duration = 8000,

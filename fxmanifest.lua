@@ -7,7 +7,7 @@ version '1.0.0'
 shared_scripts {
     '@qbx-core/import.lua',
     'config.lua',
-    '@qb-core/shared/locale.lua',
+    '@qbx-core/shared/locale.lua',
     'locales/en.lua', -- Change to the language you want
     '@ox_lib/init.lua'
 }
