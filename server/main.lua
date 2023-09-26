@@ -95,37 +95,37 @@ end
 CreateThread(manageHousePlants)
 CreateThread(updatePlantGrowth)
 
-QBCore.Functions.CreateUseableItem("weed_white-widow_seed", function(source, item)
+QBX.Functions.CreateUseableItem("weed_white-widow_seed", function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'white-widow', item)
 end)
 
-QBCore.Functions.CreateUseableItem("weed_skunk_seed", function(source, item)
+QBX.Functions.CreateUseableItem("weed_skunk_seed", function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'skunk', item)
 end)
 
-QBCore.Functions.CreateUseableItem("weed_purple-haze_seed", function(source, item)
+QBX.Functions.CreateUseableItem("weed_purple-haze_seed", function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'purple-haze', item)
 end)
 
-QBCore.Functions.CreateUseableItem("weed_og-kush_seed", function(source, item)
+QBX.Functions.CreateUseableItem("weed_og-kush_seed", function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'og-kush', item)
 end)
 
-QBCore.Functions.CreateUseableItem("weed_amnesia_seed", function(source, item)
+QBX.Functions.CreateUseableItem("weed_amnesia_seed", function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'amnesia', item)
 end)
 
-QBCore.Functions.CreateUseableItem("weed_ak47_seed", function(source, item)
+QBX.Functions.CreateUseableItem("weed_ak47_seed", function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'ak47', item)
 end)
 
-QBCore.Functions.CreateUseableItem("weed_nutrition", function(source, item)
+QBX.Functions.CreateUseableItem("weed_nutrition", function(source, item)
     TriggerClientEvent('qb-weed:client:foodPlant', source, item)
 end)
 
 RegisterServerEvent('qb-weed:server:removeSeed', function(itemslot, seed)
     local src = source
-    local player = QBCore.Functions.GetPlayer(src)
+    local player = QBX.Functions.GetPlayer(src)
     if not player then return end
 
     player.Functions.RemoveItem(seed, 1, itemslot)
@@ -133,7 +133,7 @@ end)
 
 RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantName, plantId)
     local src = source
-    local player = QBCore.Functions.GetPlayer(src)
+    local player = QBX.Functions.GetPlayer(src)
     if not player then return end
 
     local weedBag = player.Functions.GetItemByName('empty_weed_bag')
@@ -168,7 +168,7 @@ end)
 
 RegisterNetEvent('qb-weed:server:foodPlant', function(house, amount, plantName, plantId)
     local src = source
-    local player = QBCore.Functions.GetPlayer(src)
+    local player = QBX.Functions.GetPlayer(src)
     local plantStats = MySQL.query.await('SELECT * FROM house_plants WHERE building = ? AND sort = ? AND plantid = ?', { house, plantName, tostring(plantId) })
     TriggerClientEvent('ox_lib:notify', src, { description = QBWeed.Plants[plantName].label .. ' | Nutrition: ' .. plantStats[1].food .. '% + ' .. amount .. '% (' .. (plantStats[1].food + amount) .. '%)', type = 'inform' })
     if plantStats[1].food + amount > 100 then

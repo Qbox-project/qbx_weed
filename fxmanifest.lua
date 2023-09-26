@@ -5,9 +5,9 @@ description 'https://github.com/Qbox-project/qbx-weed'
 version '1.0.0'
 
 shared_scripts {
-    '@qbx-core/import.lua',
+    '@qbx_core/import.lua',
     'config.lua',
-    '@qbx-core/shared/locale.lua',
+    '@qbx_core/shared/locale.lua',
     'locales/en.lua', -- Change to the language you want
     '@ox_lib/init.lua'
 }
@@ -20,8 +20,8 @@ server_scripts {
 }
 
 modules {
-	'qbx-core:core',
-    'qbx-core:utils'
+    'qbx_core:core',
+    'qbx_core:utils'
 }
 
 provide 'qb-weed'
