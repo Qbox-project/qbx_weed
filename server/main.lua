@@ -1,4 +1,4 @@
-lib.callback.register('qb-weed:server:getBuildingPlants', function(_, building)
+lib.callback.register('qbx_weed:server:getBuildingPlants', function(_, building)
     local buildingPlants = {}
     local plants = MySQL.query.await('SELECT * FROM house_plants WHERE building = ?', { building })
 
@@ -14,19 +14,19 @@ lib.callback.register('qb-weed:server:getBuildingPlants', function(_, building)
     return buildingPlants
 end)
 
-RegisterNetEvent('qb-weed:server:placePlant', function(coords, sort, currentHouse)
+RegisterNetEvent('qbx_weed:server:placePlant', function(coords, sort, currentHouse)
     local random = math.random(1, 2)
     local gender = "woman"
     if random == 1 then
         gender = "man"
     end
     MySQL.insert.await('INSERT INTO house_plants (building, coords, gender, sort, plantid) VALUES (?, ?, ?, ?, ?)', { currentHouse, json.encode(coords), gender, sort, math.random(111111, 999999) })
-    TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, currentHouse)
+    TriggerClientEvent('qbx_weed:client:refreshHousePlants', -1, currentHouse)
 end)
 
-RegisterNetEvent('qb-weed:server:removeDeathPlant', function(building, plantId)
+RegisterNetEvent('qbx_weed:server:removeDeathPlant', function(building, plantId)
     MySQL.query.await('DELETE FROM house_plants WHERE plantid = ? AND building = ?', { plantId, building })
-    TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, building)
+    TriggerClientEvent('qbx_weed:client:refreshHousePlants', -1, building)
 end)
 
 ---@param plant table
@@ -54,7 +54,7 @@ local function manageHousePlants()
         for i = 1, #housePlants do
             checkHousePlantFood(housePlants[i])
         end
-        TriggerClientEvent('qb-weed:client:refreshPlantStats', -1)
+        TriggerClientEvent('qbx_weed:client:refreshPlantStats', -1)
         Wait(60 * 1000 * 19.2)
     end
 end
@@ -87,7 +87,7 @@ local function updatePlantGrowth()
         for i = 1, #housePlants do
             growPlant(housePlants[i])
         end
-        TriggerClientEvent('qb-weed:client:refreshPlantStats', -1)
+        TriggerClientEvent('qbx_weed:client:refreshPlantStats', -1)
         Wait(60 * 1000 * 9.6)
     end
 end
@@ -95,45 +95,45 @@ end
 CreateThread(manageHousePlants)
 CreateThread(updatePlantGrowth)
 
-QBX.Functions.CreateUseableItem("weed_white-widow_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'white-widow', item)
+exports.qbx_core:CreateUseableItem("weed_white-widow_seed", function(source, item)
+    TriggerClientEvent('qbx_weed:client:placePlant', source, 'white-widow', item)
 end)
 
-QBX.Functions.CreateUseableItem("weed_skunk_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'skunk', item)
+exports.qbx_core:CreateUseableItem("weed_skunk_seed", function(source, item)
+    TriggerClientEvent('qbx_weed:client:placePlant', source, 'skunk', item)
 end)
 
-QBX.Functions.CreateUseableItem("weed_purple-haze_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'purple-haze', item)
+exports.qbx_core:CreateUseableItem("weed_purple-haze_seed", function(source, item)
+    TriggerClientEvent('qbx_weed:client:placePlant', source, 'purple-haze', item)
 end)
 
-QBX.Functions.CreateUseableItem("weed_og-kush_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'og-kush', item)
+exports.qbx_core:CreateUseableItem("weed_og-kush_seed", function(source, item)
+    TriggerClientEvent('qbx_weed:client:placePlant', source, 'og-kush', item)
 end)
 
-QBX.Functions.CreateUseableItem("weed_amnesia_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'amnesia', item)
+exports.qbx_core:CreateUseableItem("weed_amnesia_seed", function(source, item)
+    TriggerClientEvent('qbx_weed:client:placePlant', source, 'amnesia', item)
 end)
 
-QBX.Functions.CreateUseableItem("weed_ak47_seed", function(source, item)
-    TriggerClientEvent('qb-weed:client:placePlant', source, 'ak47', item)
+exports.qbx_core:CreateUseableItem("weed_ak47_seed", function(source, item)
+    TriggerClientEvent('qbx_weed:client:placePlant', source, 'ak47', item)
 end)
 
-QBX.Functions.CreateUseableItem("weed_nutrition", function(source, item)
-    TriggerClientEvent('qb-weed:client:foodPlant', source, item)
+exports.qbx_core:CreateUseableItem("weed_nutrition", function(source, item)
+    TriggerClientEvent('qbx_weed:client:foodPlant', source, item)
 end)
 
-RegisterServerEvent('qb-weed:server:removeSeed', function(itemslot, seed)
+RegisterServerEvent('qbx_weed:server:removeSeed', function(itemslot, seed)
     local src = source
-    local player = QBX.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     if not player then return end
 
     player.Functions.RemoveItem(seed, 1, itemslot)
 end)
 
-RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantName, plantId)
+RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, amount, plantName, plantId)
     local src = source
-    local player = QBX.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     if not player then return end
 
     local weedBag = player.Functions.GetItemByName('empty_weed_bag')
@@ -163,12 +163,12 @@ RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantNam
     MySQL.query.await('DELETE FROM house_plants WHERE plantid = ? AND building = ?', { plantId, house })
     TriggerClientEvent('QBCore:Notify', src, Lang:t('text.the_plant_has_been_harvested'), 'success', 3500)
     TriggerClientEvent('ox_lib:notify', src, { description = Lang:t('text.the_plant_has_been_harvested'), type = 'success' })
-    TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, house)
+    TriggerClientEvent('qbx_weed:client:refreshHousePlants', -1, house)
 end)
 
-RegisterNetEvent('qb-weed:server:foodPlant', function(house, amount, plantName, plantId)
+RegisterNetEvent('qbx_weed:server:foodPlant', function(house, amount, plantName, plantId)
     local src = source
-    local player = QBX.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     local plantStats = MySQL.query.await('SELECT * FROM house_plants WHERE building = ? AND sort = ? AND plantid = ?', { house, plantName, tostring(plantId) })
     TriggerClientEvent('ox_lib:notify', src, { description = QBWeed.Plants[plantName].label .. ' | Nutrition: ' .. plantStats[1].food .. '% + ' .. amount .. '% (' .. (plantStats[1].food + amount) .. '%)', type = 'inform' })
     if plantStats[1].food + amount > 100 then
@@ -177,5 +177,5 @@ RegisterNetEvent('qb-weed:server:foodPlant', function(house, amount, plantName, 
         MySQL.update.await('UPDATE house_plants SET food = ? WHERE building = ? AND plantid = ?', { (plantStats[1].food + amount), house, plantId })
     end
     player.Functions.RemoveItem('weed_nutrition', 1)
-    TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, house)
+    TriggerClientEvent('qbx_weed:client:refreshHousePlants', -1, house)
 end)
