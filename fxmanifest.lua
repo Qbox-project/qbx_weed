@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'https://github.com/Qbox-project/qbx-weed'
+description 'https://github.com/Qbox-project/qbx_weed'
 version '1.0.0'
 
 shared_scripts {
@@ -20,7 +20,7 @@ server_scripts {
 }
 
 modules {
-    'qbx_core:core',
+    'qbx_core:playerdata',
     'qbx_core:utils'
 }
 
