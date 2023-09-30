@@ -77,7 +77,7 @@ local function updatePlantStats()
                             if gender == "M" then
                                 amount = math.random(1, 2)
                             end
-                            TriggerServerEvent('qb-weed:server:harvestPlant', currentHouse, amount, v.sort, v.plantid)
+                            TriggerServerEvent('qbx_weed:server:harvestPlant', currentHouse, amount, v.sort, v.plantid)
                         else
                             ClearPedTasks(cache.ped)
                             exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
@@ -106,7 +106,7 @@ local function updatePlantStats()
                         })
                     then
                         ClearPedTasks(cache.ped)
-                        TriggerServerEvent('qb-weed:server:removeDeathPlant', currentHouse, v.plantid)
+                        TriggerServerEvent('qbx_weed:server:removeDeathPlant', currentHouse, v.plantid)
                     else
                         ClearPedTasks(cache.ped)
                         exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
@@ -131,15 +131,15 @@ end
 
 CreateThread(updatePlants)
 
-RegisterNetEvent('qb-weed:client:getHousePlants', function(house)
-    local plants = lib.callback.await('qb-weed:server:getBuildingPlants', false, house)
+RegisterNetEvent('qbx_weed:client:getHousePlants', function(house)
+    local plants = lib.callback.await('qbx_weed:server:getBuildingPlants', false, house)
     currentHouse = house
     housePlants[currentHouse] = plants
     insideHouse = true
     spawnPlants()
 end)
 
-RegisterNetEvent('qb-weed:client:leaveHouse', function()
+RegisterNetEvent('qbx_weed:client:leaveHouse', function()
     despawnPlants()
     Wait(1000)
     if not currentHouse then return end
@@ -148,26 +148,26 @@ RegisterNetEvent('qb-weed:client:leaveHouse', function()
     currentHouse = nil
 end)
 
-RegisterNetEvent('qb-weed:client:refreshHousePlants', function(house)
+RegisterNetEvent('qbx_weed:client:refreshHousePlants', function(house)
     if not currentHouse or currentHouse ~= house then return end
     despawnPlants()
     Wait(1000)
-    local plants = lib.callback.await('qb-weed:server:getBuildingPlants', false, house)
+    local plants = lib.callback.await('qbx_weed:server:getBuildingPlants', false, house)
     currentHouse = house
     housePlants[currentHouse] = plants
     spawnPlants()
 end)
 
-RegisterNetEvent('qb-weed:client:refreshPlantStats', function()
+RegisterNetEvent('qbx_weed:client:refreshPlantStats', function()
     if not insideHouse then return end
     despawnPlants()
     Wait(1000)
-    local plants = lib.callback.await('qb-weed:server:getBuildingPlants', false, house)
+    local plants = lib.callback.await('qbx_weed:server:getBuildingPlants', false, house)
     housePlants[currentHouse] = plants
     spawnPlants()
 end)
 
-RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
+RegisterNetEvent('qbx_weed:client:placePlant', function(type, item)
     local plyCoords = GetOffsetFromEntityInWorldCoords(cache.ped, 0, 0.75, 0)
     local closestPlant = 0
     for _, v in pairs(QBWeed.Props) do
@@ -198,8 +198,8 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
             })
             then
                 ClearPedTasks(cache.ped)
-                TriggerServerEvent('qb-weed:server:placePlant', json.encode(plyCoords), type, currentHouse)
-                TriggerServerEvent('qb-weed:server:removeSeed', item.slot, type)
+                TriggerServerEvent('qbx_weed:server:placePlant', json.encode(plyCoords), type, currentHouse)
+                TriggerServerEvent('qbx_weed:server:removeSeed', item.slot, type)
             else
                 ClearPedTasks(cache.ped)
                 exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
@@ -213,7 +213,7 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
     end
 end)
 
-RegisterNetEvent('qb-weed:client:foodPlant', function()
+RegisterNetEvent('qbx_weed:client:foodPlant', function()
     if not currentHouse then return end
 
     if closestTarget ~= 0 then
@@ -255,7 +255,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     then
         ClearPedTasks(cache.ped)
         local newFood = math.random(40, 60)
-        TriggerServerEvent('qb-weed:server:foodPlant', currentHouse, newFood, data.sort, data.plantid)
+        TriggerServerEvent('qbx_weed:server:foodPlant', currentHouse, newFood, data.sort, data.plantid)
     else
         ClearPedTasks(cache.ped)
         LocalPlayer.state:set("invBusy", false, true)
