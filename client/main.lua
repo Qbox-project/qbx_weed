@@ -80,7 +80,7 @@ local function updatePlantStats()
                             TriggerServerEvent('qb-weed:server:harvestPlant', currentHouse, amount, v.sort, v.plantid)
                         else
                             ClearPedTasks(cache.ped)
-                            QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
+                            exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
                         end
                     end
                 end
@@ -109,7 +109,7 @@ local function updatePlantStats()
                         TriggerServerEvent('qb-weed:server:removeDeathPlant', currentHouse, v.plantid)
                     else
                         ClearPedTasks(cache.ped)
-                        QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
+                        exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
                     end
                 end
             end
@@ -202,14 +202,14 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
                 TriggerServerEvent('qb-weed:server:removeSeed', item.slot, type)
             else
                 ClearPedTasks(cache.ped)
-                QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
+                exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
                 LocalPlayer.state:set("invBusy", false, true)
             end
         else
-            QBCore.Functions.Notify(Lang:t('error.cant_place_here'), 'error')
+            exports.qbx_core:Notify(Lang:t('error.cant_place_here'), 'error')
         end
     else
-        QBCore.Functions.Notify(Lang:t('error.not_safe_here'), 'error')
+        exports.qbx_core:Notify(Lang:t('error.not_safe_here'), 'error')
     end
 end)
 
@@ -217,7 +217,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     if not currentHouse then return end
 
     if closestTarget ~= 0 then
-        QBCore.Functions.Notify(Lang:t('error.not_safe_here'), 'error')
+        exports.qbx_core:Notify(Lang:t('error.not_safe_here'), 'error')
         return
     end
 
@@ -225,12 +225,12 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     local plyDistance = #(GetEntityCoords(cache.ped) - data.coords)
 
     if plyDistance >= 1.0 then
-        QBCore.Functions.Notify(Lang:t('error.cant_place_here'), 'error')
+        exports.qbx_core:Notify(Lang:t('error.cant_place_here'), 'error')
         return
     end
 
     if data.food == 100 then
-        QBCore.Functions.Notify(Lang:t('error.not_need_nutrition'), 'error')
+        exports.qbx_core:Notify(Lang:t('error.not_need_nutrition'), 'error')
         return
     end
 
@@ -259,7 +259,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     else
         ClearPedTasks(cache.ped)
         LocalPlayer.state:set("invBusy", false, true)
-        QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
+        exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
     end
 end)
 
