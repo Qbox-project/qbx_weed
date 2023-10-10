@@ -152,7 +152,7 @@ RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantNam
     local result = MySQL.query.await('SELECT * FROM house_plants WHERE plantid = ? AND building = ?', { plantId, house })
 
     if result[1] then
-        TriggerClientEvent('ox_lib:notify', src, { description = Lang:t('error.this_plant_no_longer_exists'), type = 'error' })
+        exports.qbx_core:Notify(src, Lang:t('error.this_plant_no_longer_exists'), 'error' )
         MySQL.update.await('UPDATE players SET inventory = ? WHERE citizenid = ?', { '[]', player.PlayerData.citizenid })
         return
     end
@@ -161,8 +161,8 @@ RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantNam
     player.Functions.AddItem('weed_' .. plantName, sndAmount)
     player.Functions.RemoveItem('empty_weed_bag', sndAmount)
     MySQL.query.await('DELETE FROM house_plants WHERE plantid = ? AND building = ?', { plantId, house })
-    TriggerClientEvent('QBCore:Notify', src, Lang:t('text.the_plant_has_been_harvested'), 'success', 3500)
-    TriggerClientEvent('ox_lib:notify', src, { description = Lang:t('text.the_plant_has_been_harvested'), type = 'success' })
+    exports.qbx_core:Notify(src, Lang:t('text.the_plant_has_been_harvested'), 'success', 3500)
+    exports.qbx_core:Notify(src, Lang:t('text.the_plant_has_been_harvested'), 'success' )
     TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, house)
 end)
 
@@ -170,7 +170,7 @@ RegisterNetEvent('qb-weed:server:foodPlant', function(house, amount, plantName, 
     local src = source
     local player = exports.qbx_core:GetPlayer(src)
     local plantStats = MySQL.query.await('SELECT * FROM house_plants WHERE building = ? AND sort = ? AND plantid = ?', { house, plantName, tostring(plantId) })
-    TriggerClientEvent('ox_lib:notify', src, { description = QBWeed.Plants[plantName].label .. ' | Nutrition: ' .. plantStats[1].food .. '% + ' .. amount .. '% (' .. (plantStats[1].food + amount) .. '%)', type = 'inform' })
+    exports.qbx_core:Notify(src, QBWeed.Plants[plantName].label .. ' | Nutrition: ' .. plantStats[1].food .. '% + ' .. amount .. '% (' .. (plantStats[1].food + amount) .. '%)', 'inform')
     if plantStats[1].food + amount > 100 then
         MySQL.update.await('UPDATE house_plants SET food = ? WHERE building = ? AND plantid = ?', { 100, house, plantId })
     else
