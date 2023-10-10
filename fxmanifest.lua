@@ -1,7 +1,8 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'https://github.com/Qbox-project/qbx-weed'
+description 'QBX-Weed'
+repository 'https://github.com/Qbox-project/qbx-weed'
 version '1.0.0'
 
 shared_scripts {
@@ -19,10 +20,7 @@ server_scripts {
     'server/main.lua'
 }
 
-modules {
-    'qbx_core:core',
-    'qbx_core:utils'
-}
+modules {'qbx_core:utils'}
 
 provide 'qb-weed'
 lua54 'yes'
