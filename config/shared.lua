@@ -84,5 +84,15 @@ return {
             },
             highestStage = 'stage-7'
         },
+    },
+
+    props = {
+        stage1 = 'bkr_prop_weed_01_small_01c',
+        stage2 = 'bkr_prop_weed_01_small_01b',
+        stage3 = 'bkr_prop_weed_01_small_01a',
+        stage4 = 'bkr_prop_weed_med_01b',
+        stage5 = 'bkr_prop_weed_lrg_01a',
+        stage6 = 'bkr_prop_weed_lrg_01b',
+        stage7 = 'bkr_prop_weed_lrg_01b',
     }
 }

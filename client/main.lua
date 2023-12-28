@@ -171,7 +171,7 @@ end)
 RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
     local plyCoords = GetOffsetFromEntityInWorldCoords(cache.ped, 0, 0.75, 0)
     local closestPlant = 0
-    for _, v in pairs(QBWeed.Props) do
+    for _, v in pairs(sharedConfig.props) do
         if closestPlant == 0 then
             closestPlant = GetClosestObjectOfType(plyCoords.x, plyCoords.y, plyCoords.z, 0.8, joaat(v), false, false, false)
         end
