@@ -1,3 +1,4 @@
+local sharedConfig = require 'config.shared'
 local housePlants = {}
 local insideHouse = false
 local currentHouse = nil
@@ -7,7 +8,7 @@ local closestTarget = 0
 local function spawnPlants()
     if plantsSpawned then return end
     for _, v in pairs(housePlants[currentHouse]) do
-        local plantProp = CreateObject(joaat(QBWeed.Plants[v.sort].stages[v.stage]), v.coords.x, v.coords.y, v.coords.z, false, false, false)
+        local plantProp = CreateObject(joaat(sharedConfig.plants[v.sort].stages[v.stage]), v.coords.x, v.coords.y, v.coords.z, false, false, false)
         while not plantProp do Wait(0) end
 
         PlaceObjectOnGroundProperly(plantProp)
@@ -29,7 +30,7 @@ local function despawnPlants()
     if not (plantsSpawned or currentHouse) then return end
 
     for _, v in pairs(housePlants[currentHouse]) do
-        for _, stage in pairs(QBWeed.Plants[v.sort].stages) do
+        for _, stage in pairs(sharedConfig.plants[v.sort].stages) do
             deleteClosestPlant(stage, v)
             v = nil
         end
@@ -40,19 +41,19 @@ end
 local function updatePlantStats()
     if not (insideHouse or plantsSpawned) then return end
     for k, v in pairs(housePlants[currentHouse]) do
-        local gender = "M"
-        if v.gender == "woman" then gender = "F" end
+        local gender = 'M'
+        if v.gender == 'woman' then gender = 'F' end
 
         local plyDistance = #(GetEntityCoords(cache.ped) - v.coords)
 
         if plyDistance < 0.8 then
             closestTarget = k
             if v.health > 0 then
-                if v.stage ~= QBWeed.Plants[v.sort].highestStage then
-                    DrawText3D(('%s%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), QBWeed.Plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health), v.coords)
+                if v.stage ~= sharedConfig.plants[v.sort].highestStage then
+                    DrawText3D(('%s%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), sharedConfig.plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health), v.coords)
                 else
                     DrawText3D(Lang:t('text.harvest_plant'), v.coords.x, v.coords.y, v.coords.z + 0.2)
-                    DrawText3D(('%s ~g~%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), QBWeed.Plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health), v.coords)
+                    DrawText3D(('%s ~g~%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), sharedConfig.plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health), v.coords)
                     if IsControlJustPressed(0, 38) then
                         if lib.progressCircle({
                                 duration = 8000,
@@ -67,14 +68,14 @@ local function updatePlantStats()
                                     combat = true,
                                 },
                                 anim = {
-                                    dict = "amb@world_human_gardener_plant@male@base",
-                                    clip = "base",
+                                    dict = 'amb@world_human_gardener_plant@male@base',
+                                    clip = 'base',
                                 },
                             })
                         then
                             ClearPedTasks(cache.ped)
                             local amount = math.random(1, 6)
-                            if gender == "M" then
+                            if gender == 'M' then
                                 amount = math.random(1, 2)
                             end
                             TriggerServerEvent('qb-weed:server:harvestPlant', currentHouse, amount, v.sort, v.plantid)
@@ -100,8 +101,8 @@ local function updatePlantStats()
                                 combat = true,
                             },
                             anim = {
-                                dict = "amb@world_human_gardener_plant@male@base",
-                                clip = "base",
+                                dict = 'amb@world_human_gardener_plant@male@base',
+                                clip = 'base',
                             },
                         })
                     then
@@ -170,7 +171,7 @@ end)
 RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
     local plyCoords = GetOffsetFromEntityInWorldCoords(cache.ped, 0, 0.75, 0)
     local closestPlant = 0
-    for _, v in pairs(QBWeed.Props) do
+    for _, v in pairs(sharedConfig.props) do
         if closestPlant == 0 then
             closestPlant = GetClosestObjectOfType(plyCoords.x, plyCoords.y, plyCoords.z, 0.8, joaat(v), false, false, false)
         end
@@ -178,7 +179,7 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
 
     if currentHouse then
         if closestPlant == 0 then
-            LocalPlayer.state:set("invBusy", true, true)
+            LocalPlayer.state:set('invBusy', true, true)
             if lib.progressCircle({
                 duration = 8000,
                 position = 'bottom',
@@ -192,8 +193,8 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
                     combat = true,
                 },
                 anim = {
-                    dict = "amb@world_human_gardener_plant@male@base",
-                    clip = "base",
+                    dict = 'amb@world_human_gardener_plant@male@base',
+                    clip = 'base',
                 },
             })
             then
@@ -203,7 +204,7 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
             else
                 ClearPedTasks(cache.ped)
                 exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
-                LocalPlayer.state:set("invBusy", false, true)
+                LocalPlayer.state:set('invBusy', false, true)
             end
         else
             exports.qbx_core:Notify(Lang:t('error.cant_place_here'), 'error')
@@ -234,7 +235,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
         return
     end
 
-    LocalPlayer.state:set("invBusy", true, true)
+    LocalPlayer.state:set('invBusy', true, true)
     if lib.progressCircle({
             duration = math.random(4000, 8000),
             position = 'bottom',
@@ -248,8 +249,8 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
                 combat = true,
             },
             anim = {
-                dict = "timetable@gardener@filling_can",
-                clip = "gar_ig_5_filling_can",
+                dict = 'timetable@gardener@filling_can',
+                clip = 'gar_ig_5_filling_can',
             },
         })
     then
@@ -258,7 +259,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
         TriggerServerEvent('qb-weed:server:foodPlant', currentHouse, newFood, data.sort, data.plantid)
     else
         ClearPedTasks(cache.ped)
-        LocalPlayer.state:set("invBusy", false, true)
+        LocalPlayer.state:set('invBusy', false, true)
         exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
     end
 end)

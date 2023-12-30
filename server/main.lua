@@ -1,3 +1,5 @@
+local sharedConfig = require 'config.shared'
+
 lib.callback.register('qb-weed:server:getBuildingPlants', function(_, building)
     local buildingPlants = {}
     local plants = MySQL.query.await('SELECT * FROM house_plants WHERE building = ?', { building })
@@ -16,9 +18,9 @@ end)
 
 RegisterNetEvent('qb-weed:server:placePlant', function(coords, sort, currentHouse)
     local random = math.random(1, 2)
-    local gender = "woman"
+    local gender = 'woman'
     if random == 1 then
-        gender = "man"
+        gender = 'man'
     end
     MySQL.insert.await('INSERT INTO house_plants (building, coords, gender, sort, plantid) VALUES (?, ?, ?, ?, ?)', { currentHouse, json.encode(coords), gender, sort, math.random(111111, 999999) })
     TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, currentHouse)
@@ -63,7 +65,7 @@ end
 ---@return string nextStage
 local function getNextStage(plant)
     local initStage = tonumber(string.sub(plant.stage, -1))
-    return "stage-" .. tostring(initStage + 1)
+    return 'stage-' .. tostring(initStage + 1)
 end
 
 ---@param plant table
@@ -74,7 +76,7 @@ local function growPlant(plant)
         MySQL.update.await('UPDATE house_plants SET progress = ? WHERE plantid = ?', { (plant.progress + grow), plant.plantid })
         return
     end
-    if plant.stage == QBWeed.Plants[plant.sort].highestStage then return end
+    if plant.stage == sharedConfig.plants[plant.sort].highestStage then return end
     if plant.stage then
         MySQL.update.await('UPDATE house_plants SET stage = ? WHERE plantid = ?', { getNextStage(plant.stage), plant.plantid })
     end
@@ -95,31 +97,31 @@ end
 CreateThread(manageHousePlants)
 CreateThread(updatePlantGrowth)
 
-exports.qbx_core:CreateUseableItem("weed_white-widow_seed", function(source, item)
+exports.qbx_core:CreateUseableItem('weed_white-widow_seed', function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'white-widow', item)
 end)
 
-exports.qbx_core:CreateUseableItem("weed_skunk_seed", function(source, item)
+exports.qbx_core:CreateUseableItem('weed_skunk_seed', function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'skunk', item)
 end)
 
-exports.qbx_core:CreateUseableItem("weed_purple-haze_seed", function(source, item)
+exports.qbx_core:CreateUseableItem('weed_purple-haze_seed', function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'purple-haze', item)
 end)
 
-exports.qbx_core:CreateUseableItem("weed_og-kush_seed", function(source, item)
+exports.qbx_core:CreateUseableItem('weed_og-kush_seed', function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'og-kush', item)
 end)
 
-exports.qbx_core:CreateUseableItem("weed_amnesia_seed", function(source, item)
+exports.qbx_core:CreateUseableItem('weed_amnesia_seed', function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'amnesia', item)
 end)
 
-exports.qbx_core:CreateUseableItem("weed_ak47_seed", function(source, item)
+exports.qbx_core:CreateUseableItem('weed_ak47_seed', function(source, item)
     TriggerClientEvent('qb-weed:client:placePlant', source, 'ak47', item)
 end)
 
-exports.qbx_core:CreateUseableItem("weed_nutrition", function(source, item)
+exports.qbx_core:CreateUseableItem('weed_nutrition', function(source, item)
     TriggerClientEvent('qb-weed:client:foodPlant', source, item)
 end)
 
@@ -170,7 +172,7 @@ RegisterNetEvent('qb-weed:server:foodPlant', function(house, amount, plantName, 
     local src = source
     local player = exports.qbx_core:GetPlayer(src)
     local plantStats = MySQL.query.await('SELECT * FROM house_plants WHERE building = ? AND sort = ? AND plantid = ?', { house, plantName, tostring(plantId) })
-    exports.qbx_core:Notify(src, QBWeed.Plants[plantName].label .. ' | Nutrition: ' .. plantStats[1].food .. '% + ' .. amount .. '% (' .. (plantStats[1].food + amount) .. '%)', 'inform')
+    exports.qbx_core:Notify(src, sharedConfig.plants[plantName].label .. ' | Nutrition: ' .. plantStats[1].food .. '% + ' .. amount .. '% (' .. (plantStats[1].food + amount) .. '%)', 'inform')
     if plantStats[1].food + amount > 100 then
         MySQL.update.await('UPDATE house_plants SET food = ? WHERE building = ? AND plantid = ?', { 100, house, plantId })
     else

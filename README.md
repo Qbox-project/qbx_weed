@@ -1,2 +1,2 @@
-# qb-weed
-Weed Growing For QB-Core
+# qbx_weed
+Weed Growing For QBox
