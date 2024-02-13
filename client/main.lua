@@ -20,7 +20,7 @@ local function spawnPlants()
 end
 
 local function deleteClosestPlant(plantStage, plantData)
-    if not (plantStage or plantData) then return end
+    if not (plantStage and plantData) then return end
 
     local closestPlant = GetClosestObjectOfType(plantData.coords.x, plantData.coords.y, plantData.coords.z, 3.5, joaat(plantStage), false, false, false)
     if closestPlant == 0 then return end
