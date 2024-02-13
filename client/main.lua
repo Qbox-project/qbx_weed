@@ -50,17 +50,17 @@ local function updatePlantStats()
             closestTarget = k
             if v.health > 0 then
                 if v.stage ~= sharedConfig.plants[v.sort].highestStage then
-                    local label = ('%s%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), sharedConfig.plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health)
+                    local label = ('%s%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(locale('text.sort'), sharedConfig.plants[v.sort].label, gender, locale('text.nutrition'), v.food, locale('text.health'), v.health)
                     qbx.drawText3d({text = label, coords = v.coords})
                 else
-                    local label = ('%s ~g~%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), sharedConfig.plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health)
-                    qbx.drawText3d({text = Lang:t('text.harvest_plant'), coords = vec3(v.coords.x, v.coords.y, v.coords.z + 0.2)})
+                    local label = ('%s ~g~%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(locale('text.sort'), sharedConfig.plants[v.sort].label, gender, locale('text.nutrition'), v.food, locale('text.health'), v.health)
+                    qbx.drawText3d({text = locale('text.harvest_plant'), coords = vec3(v.coords.x, v.coords.y, v.coords.z + 0.2)})
                     qbx.drawText3d({text = label, coords = v.coords})
                     if IsControlJustPressed(0, 38) then
                         if lib.progressCircle({
                             duration = 8000,
                             position = 'bottom',
-                            label = Lang:t('text.harvesting_plant'),
+                            label = locale('text.harvesting_plant'),
                             useWhileDead = false,
                             canCancel = true,
                             disable = {
@@ -83,17 +83,17 @@ local function updatePlantStats()
                             TriggerServerEvent('qb-weed:server:harvestPlant', currentHouse, amount, v.sort, v.plantid)
                         else
                             ClearPedTasks(cache.ped)
-                            exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
+                            exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
                         end
                     end
                 end
             elseif v.health == 0 then
-                qbx.drawText3d({text = Lang:t('error.plant_has_died'), coords = v.coords})
+                qbx.drawText3d({text = locale('error.plant_has_died'), coords = v.coords})
                 if IsControlJustPressed(0, 38) then
                     if lib.progressCircle({
                             duration = 8000,
                             position = 'bottom',
-                            label = Lang:t('text.removing_the_plant'),
+                            label = locale('text.removing_the_plant'),
                             useWhileDead = false,
                             canCancel = true,
                             disable = {
@@ -112,7 +112,7 @@ local function updatePlantStats()
                         TriggerServerEvent('qb-weed:server:removeDeathPlant', currentHouse, v.plantid)
                     else
                         ClearPedTasks(cache.ped)
-                        exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
+                        exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
                     end
                 end
             end
@@ -185,7 +185,7 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
             if lib.progressCircle({
                 duration = 8000,
                 position = 'bottom',
-                label = Lang:t('text.planting'),
+                label = locale('text.planting'),
                 useWhileDead = false,
                 canCancel = true,
                 disable = {
@@ -205,14 +205,14 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
                 TriggerServerEvent('qb-weed:server:removeSeed', item.slot, type)
             else
                 ClearPedTasks(cache.ped)
-                exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
+                exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
                 LocalPlayer.state:set('invBusy', false, true)
             end
         else
-            exports.qbx_core:Notify(Lang:t('error.cant_place_here'), 'error')
+            exports.qbx_core:Notify(locale('error.cant_place_here'), 'error')
         end
     else
-        exports.qbx_core:Notify(Lang:t('error.not_safe_here'), 'error')
+        exports.qbx_core:Notify(locale('error.not_safe_here'), 'error')
     end
 end)
 
@@ -220,7 +220,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     if not currentHouse then return end
 
     if closestTarget ~= 0 then
-        exports.qbx_core:Notify(Lang:t('error.not_safe_here'), 'error')
+        exports.qbx_core:Notify(locale('error.not_safe_here'), 'error')
         return
     end
 
@@ -228,12 +228,12 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     local plyDistance = #(GetEntityCoords(cache.ped) - data.coords)
 
     if plyDistance >= 1.0 then
-        exports.qbx_core:Notify(Lang:t('error.cant_place_here'), 'error')
+        exports.qbx_core:Notify(locale('error.cant_place_here'), 'error')
         return
     end
 
     if data.food == 100 then
-        exports.qbx_core:Notify(Lang:t('error.not_need_nutrition'), 'error')
+        exports.qbx_core:Notify(locale('error.not_need_nutrition'), 'error')
         return
     end
 
@@ -241,7 +241,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     if lib.progressCircle({
             duration = math.random(4000, 8000),
             position = 'bottom',
-            label = Lang:t('text.feeding_plant'),
+            label = locale('text.feeding_plant'),
             useWhileDead = false,
             canCancel = true,
             disable = {
@@ -262,7 +262,7 @@ RegisterNetEvent('qb-weed:client:foodPlant', function()
     else
         ClearPedTasks(cache.ped)
         LocalPlayer.state:set('invBusy', false, true)
-        exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
+        exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
     end
 end)
 
