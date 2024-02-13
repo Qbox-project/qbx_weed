@@ -142,19 +142,19 @@ RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantNam
     local sndAmount = math.random(12, 16)
 
     if not weedBag or weedBag.amount < sndAmount then
-        exports.qbx_core:Notify(src, Lang:t('error.you_dont_have_enough_resealable_bags'), 'error')
+        exports.qbx_core:Notify(src, locale('error.you_dont_have_enough_resealable_bags'), 'error')
         return
     end
 
     if not house then
-        exports.qbx_core:Notify(src, Lang:t('error.house_not_found'), 'error')
+        exports.qbx_core:Notify(src, locale('error.house_not_found'), 'error')
         return
     end
 
     local result = MySQL.query.await('SELECT * FROM house_plants WHERE plantid = ? AND building = ?', { plantId, house })
 
     if result[1] then
-        exports.qbx_core:Notify(src, Lang:t('error.this_plant_no_longer_exists'), 'error' )
+        exports.qbx_core:Notify(src, locale('error.this_plant_no_longer_exists'), 'error' )
         MySQL.update.await('UPDATE players SET inventory = ? WHERE citizenid = ?', { '[]', player.PlayerData.citizenid })
         return
     end
@@ -163,8 +163,7 @@ RegisterNetEvent('qb-weed:server:harvestPlant', function(house, amount, plantNam
     player.Functions.AddItem('weed_' .. plantName, sndAmount)
     player.Functions.RemoveItem('empty_weed_bag', sndAmount)
     MySQL.query.await('DELETE FROM house_plants WHERE plantid = ? AND building = ?', { plantId, house })
-    exports.qbx_core:Notify(src, Lang:t('text.the_plant_has_been_harvested'), 'success', 3500)
-    exports.qbx_core:Notify(src, Lang:t('text.the_plant_has_been_harvested'), 'success' )
+    exports.qbx_core:Notify(src, locale('text.the_plant_has_been_harvested'), 'success' )
     TriggerClientEvent('qb-weed:client:refreshHousePlants', -1, house)
 end)
 
