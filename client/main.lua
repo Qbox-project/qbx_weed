@@ -32,8 +32,8 @@ local function despawnPlants()
     for _, v in pairs(housePlants[currentHouse]) do
         for _, stage in pairs(sharedConfig.plants[v.sort].stages) do
             deleteClosestPlant(stage, v)
-            v = nil
         end
+        v = nil
     end
     plantsSpawned = false
 end
@@ -50,10 +50,10 @@ local function updatePlantStats()
             closestTarget = k
             if v.health > 0 then
                 if v.stage ~= sharedConfig.plants[v.sort].highestStage then
-                    local label = ('%s%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(locale('text.sort'), sharedConfig.plants[v.sort].label, gender, locale('text.nutrition'), v.food, locale('text.health'), v.health)
+                    local label = ('%s%s~w~ [%s] | %s ~b~%s~w~ | %s ~b~%s~w~'):format(locale('text.sort'), sharedConfig.plants[v.sort].label, gender, locale('text.nutrition'), v.food, locale('text.health'), v.health)
                     qbx.drawText3d({text = label, coords = v.coords})
                 else
-                    local label = ('%s ~g~%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(locale('text.sort'), sharedConfig.plants[v.sort].label, gender, locale('text.nutrition'), v.food, locale('text.health'), v.health)
+                    local label = ('%s ~g~%s~w~ [%s] | %s ~b~%s~w~ | %s ~b~%s~w~'):format(locale('text.sort'), sharedConfig.plants[v.sort].label, gender, locale('text.nutrition'), v.food, locale('text.health'), v.health)
                     qbx.drawText3d({text = locale('text.harvest_plant'), coords = vec3(v.coords.x, v.coords.y, v.coords.z + 0.2)})
                     qbx.drawText3d({text = label, coords = v.coords})
                     if IsControlJustPressed(0, 38) then
@@ -201,7 +201,7 @@ RegisterNetEvent('qb-weed:client:placePlant', function(type, item)
             })
             then
                 ClearPedTasks(cache.ped)
-                TriggerServerEvent('qb-weed:server:placePlant', json.encode(plyCoords), type, currentHouse)
+                TriggerServerEvent('qb-weed:server:placePlant', plyCoords, type, currentHouse)
                 TriggerServerEvent('qb-weed:server:removeSeed', item.slot, type)
             else
                 ClearPedTasks(cache.ped)
