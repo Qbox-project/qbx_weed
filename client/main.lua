@@ -50,28 +50,30 @@ local function updatePlantStats()
             closestTarget = k
             if v.health > 0 then
                 if v.stage ~= sharedConfig.plants[v.sort].highestStage then
-                    DrawText3D(('%s%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), sharedConfig.plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health), v.coords)
+                    local label = ('%s%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), sharedConfig.plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health)
+                    qbx.drawText3d({text = label, coords = v.coords})
                 else
-                    DrawText3D(Lang:t('text.harvest_plant'), v.coords.x, v.coords.y, v.coords.z + 0.2)
-                    DrawText3D(('%s ~g~%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), sharedConfig.plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health), v.coords)
+                    local label = ('%s ~g~%s~w~ [%s] | %s ~b~%s% ~w~ | %s ~b~%s%'):format(Lang:t('text.sort'), sharedConfig.plants[v.sort].label, gender, Lang:t('text.nutrition'), v.food, Lang:t('text.health'), v.health)
+                    qbx.drawText3d({text = Lang:t('text.harvest_plant'), coords = vec3(v.coords.x, v.coords.y, v.coords.z + 0.2)})
+                    qbx.drawText3d({text = label, coords = v.coords})
                     if IsControlJustPressed(0, 38) then
                         if lib.progressCircle({
-                                duration = 8000,
-                                position = 'bottom',
-                                label = Lang:t('text.harvesting_plant'),
-                                useWhileDead = false,
-                                canCancel = true,
-                                disable = {
-                                    move = true,
-                                    car = true,
-                                    mouse = false,
-                                    combat = true,
-                                },
-                                anim = {
-                                    dict = 'amb@world_human_gardener_plant@male@base',
-                                    clip = 'base',
-                                },
-                            })
+                            duration = 8000,
+                            position = 'bottom',
+                            label = Lang:t('text.harvesting_plant'),
+                            useWhileDead = false,
+                            canCancel = true,
+                            disable = {
+                                move = true,
+                                car = true,
+                                mouse = false,
+                                combat = true,
+                            },
+                            anim = {
+                                dict = 'amb@world_human_gardener_plant@male@base',
+                                clip = 'base',
+                            },
+                        })
                         then
                             ClearPedTasks(cache.ped)
                             local amount = math.random(1, 6)
@@ -86,7 +88,7 @@ local function updatePlantStats()
                     end
                 end
             elseif v.health == 0 then
-                DrawText3D(Lang:t('error.plant_has_died'), v.coords)
+                qbx.drawText3d({text = Lang:t('error.plant_has_died'), coords = v.coords})
                 if IsControlJustPressed(0, 38) then
                     if lib.progressCircle({
                             duration = 8000,
@@ -160,10 +162,10 @@ RegisterNetEvent('qb-weed:client:refreshHousePlants', function(house)
 end)
 
 RegisterNetEvent('qb-weed:client:refreshPlantStats', function()
-    if not insideHouse then return end
+    if not insideHouse or not currentHouse then return end
     despawnPlants()
     Wait(1000)
-    local plants = lib.callback.await('qb-weed:server:getBuildingPlants', false, house)
+    local plants = lib.callback.await('qb-weed:server:getBuildingPlants', false, currentHouse)
     housePlants[currentHouse] = plants
     spawnPlants()
 end)
