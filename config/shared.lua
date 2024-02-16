@@ -12,7 +12,7 @@ return {
                 stage6 = 'bkr_prop_weed_lrg_01b',
                 stage7 = 'bkr_prop_weed_lrg_01b',
             },
-            highestStage = 'stage-7'
+            highestStage = 'stage7'
         },
         amnesia = {
             label = 'Amnesia 2g',
@@ -26,7 +26,7 @@ return {
                 stage6 = 'bkr_prop_weed_lrg_01b',
                 stage7 = 'bkr_prop_weed_lrg_01b',
             },
-            highestStage = 'stage-7'
+            highestStage = 'stage7'
         },
         skunk = {
             label = 'Skunk 2g',
@@ -40,7 +40,7 @@ return {
                 stage6 = 'bkr_prop_weed_lrg_01b',
                 stage7 = 'bkr_prop_weed_lrg_01b',
             },
-            highestStage = 'stage-7'
+            highestStage = 'stage7'
         },
         ak47 = {
             label = 'AK47 2g',
@@ -54,7 +54,7 @@ return {
                 stage6 = 'bkr_prop_weed_lrg_01b',
                 stage7 = 'bkr_prop_weed_lrg_01b',
             },
-            highestStage = 'stage-7'
+            highestStage = 'stage7'
         },
         purple_haze = {
             label = 'Purple Haze 2g',
@@ -68,7 +68,7 @@ return {
                 stage6 = 'bkr_prop_weed_lrg_01b',
                 stage7 = 'bkr_prop_weed_lrg_01b',
             },
-            highestStage = 'stage-7'
+            highestStage = 'stage7'
         },
         white_widow = {
             label = 'White Widow 2g',
@@ -82,7 +82,7 @@ return {
                 stage6 = 'bkr_prop_weed_lrg_01b',
                 stage7 = 'bkr_prop_weed_lrg_01b',
             },
-            highestStage = 'stage-7'
+            highestStage = 'stage7'
         },
     },
 
