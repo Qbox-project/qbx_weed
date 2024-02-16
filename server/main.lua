@@ -24,7 +24,7 @@ RegisterNetEvent('qbx_weed:server:removeDeathPlant', function(building, plantId,
     local src = source
     local player = exports.qbx_core:GetPlayer(src)
     if not player or not building then return end
-    if #(GetEntityCoords(GetPlayerPed(src)) - plantCoords) > 3 then return end
+    if #(GetEntityCoords(GetPlayerPed(src)) - plantCoords) > 2 then return end
     MySQL.prepare.await('DELETE FROM house_plants WHERE id = ?', { plantId })
     TriggerClientEvent('qbx_weed:client:refreshHousePlants', -1, building)
 end)
@@ -113,11 +113,11 @@ RegisterServerEvent('qbx_weed:server:removeSeed', function(itemslot, seed)
     player.Functions.RemoveItem(seed, 1, itemslot)
 end)
 
-RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, amount, plantName, plantId)
+RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, seedAmount, plantItemName, plantId, plantCoords)
     local src = source
     local player = exports.qbx_core:GetPlayer(src)
-    if not player then return end
-    if not house then exports.qbx_core:Notify(src, locale('error.house_not_found'), 'error') return end
+    if not player or not house then return end
+    if #(GetEntityCoords(GetPlayerPed(src)) - plantCoords) > 2 then return end
     if not MySQL.prepare.await('SELECT 1 FROM house_plants WHERE id = ?', { plantId }) then
         exports.qbx_core:Notify(src, locale('error.this_plant_no_longer_exists'), 'error' )
         return
@@ -132,8 +132,8 @@ RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, amount, plantNa
     end
 
     if player.Functions.RemoveItem('empty_weed_bag', harvestAmount) then
-        player.Functions.AddItem(plantName .. '_seed', amount)
-        player.Functions.AddItem(plantName, harvestAmount)
+        player.Functions.AddItem(plantItemName .. '_seed', seedAmount)
+        player.Functions.AddItem(plantItemName, harvestAmount)
         MySQL.prepare.await('DELETE FROM house_plants WHERE id = ?', { plantId })
         exports.qbx_core:Notify(src, locale('text.the_plant_has_been_harvested'), 'success')
         TriggerClientEvent('qbx_weed:client:refreshHousePlants', -1, house)

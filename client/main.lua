@@ -84,7 +84,7 @@ local function updatePlantStats()
                             if gender == 'M' then
                                 amount = math.random(1, 2)
                             end
-                            TriggerServerEvent('qbx_weed:server:harvestPlant', currentHouse, amount, v.sort, v.id)
+                            TriggerServerEvent('qbx_weed:server:harvestPlant', currentHouse, amount, sharedConfig.plants[v.sort].item, v.id, v.coords)
                         else
                             ClearPedTasks(cache.ped)
                             exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
@@ -138,7 +138,7 @@ end
 
 CreateThread(updatePlants)
 
-RegisterNetEvent('qbx_weed:client:getHousePlants', function(house)
+RegisterNetEvent('qb-weed:client:getHousePlants', function(house)
     local plants = lib.callback.await('qbx_weed:server:getBuildingPlants', false, house)
     currentHouse = house
     housePlants[currentHouse] = plants
@@ -146,7 +146,7 @@ RegisterNetEvent('qbx_weed:client:getHousePlants', function(house)
     spawnPlants()
 end)
 
-RegisterNetEvent('qbx_weed:client:leaveHouse', function()
+RegisterNetEvent('qb-weed:client:leaveHouse', function()
     despawnPlants()
     Wait(1000)
     if not currentHouse then return end
