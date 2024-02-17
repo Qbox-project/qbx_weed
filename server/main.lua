@@ -100,8 +100,8 @@ for plantName, plantData in pairs(sharedConfig.plants) do
     end)
 end
 
-exports.qbx_core:CreateUseableItem('weed_nutrition', function(source, item)
-    TriggerClientEvent('qb-weed:client:foodPlant', source, item)
+exports.qbx_core:CreateUseableItem(sharedConfig.items.nutrition, function(source, item)
+    TriggerClientEvent('qbx_weed:client:foodPlant', source, item)
 end)
 
 RegisterServerEvent('qbx_weed:server:removeSeed', function(itemslot, seed)
@@ -120,7 +120,7 @@ RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, seedAmount, pla
         return
     end
 
-    local weedBag = player.Functions.GetItemByName('empty_weed_bag')
+    local weedBag = player.Functions.GetItemByName(sharedConfig.items.emptyBag)
     local harvestAmount = math.random(12, 16)
 
     if not weedBag or weedBag.amount < harvestAmount then
@@ -128,7 +128,7 @@ RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, seedAmount, pla
         return
     end
 
-    if player.Functions.RemoveItem('empty_weed_bag', harvestAmount) then
+    if player.Functions.RemoveItem(sharedConfig.items.emptyBag, harvestAmount) then
         player.Functions.AddItem(plantItemName .. '_seed', seedAmount)
         player.Functions.AddItem(plantItemName, harvestAmount)
         MySQL.prepare.await('DELETE FROM house_plants WHERE id = ?', { plantId })
@@ -140,13 +140,13 @@ end)
 RegisterNetEvent('qbx_weed:server:foodPlant', function(house, amount, plantName, plantId)
     local player = exports.qbx_core:GetPlayer(source)
     if not player then return end
-    local plantStats = MySQL.prepare.await('SELECT food FROM house_plants WHERE id = ?', { plantId })
-    exports.qbx_core:Notify(player.PlayerData.source, sharedConfig.plants[plantName].label .. ' | Nutrition: ' .. plantStats.food .. '% + ' .. amount .. '% (' .. (plantStats.food + amount) .. '%)', 'inform')
-    if plantStats.food + amount > 100 then
+    local plantFood = MySQL.prepare.await('SELECT food FROM house_plants WHERE id = ?', { plantId })
+    exports.qbx_core:Notify(player.PlayerData.source, sharedConfig.plants[plantName].label .. ' | Nutrition: ' .. plantFood .. '% + ' .. amount .. '% (' .. (plantFood + amount) .. '%)', 'inform')
+    if plantFood + amount > 100 then
         MySQL.update.await('UPDATE house_plants SET food = ? WHERE id = ?', { 100, plantId })
     else
-        MySQL.update.await('UPDATE house_plants SET food = ? WHERE id = ?', { (plantStats.food + amount), plantId })
+        MySQL.update.await('UPDATE house_plants SET food = ? WHERE id = ?', { (plantFood + amount), plantId })
     end
-    player.Functions.RemoveItem('weed_nutrition', 1)
+    player.Functions.RemoveItem(sharedConfig.items.nutrition, 1)
     TriggerClientEvent('qbx_weed:client:refreshHousePlants', -1, house)
 end)
