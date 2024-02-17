@@ -85,7 +85,6 @@ return {
             highestStage = 'stage7'
         },
     },
-
     props = {
         stage1 = 'bkr_prop_weed_01_small_01c',
         stage2 = 'bkr_prop_weed_01_small_01b',
@@ -94,5 +93,9 @@ return {
         stage5 = 'bkr_prop_weed_lrg_01a',
         stage6 = 'bkr_prop_weed_lrg_01b',
         stage7 = 'bkr_prop_weed_lrg_01b',
+    },
+    items = {
+        nutrition = 'weed_nutrition',
+        emptyBag = 'empty_weed_bag'
     }
 }
