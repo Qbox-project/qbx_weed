@@ -116,7 +116,7 @@ RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, seedAmount, pla
     if not player or not house then return end
     if #(GetEntityCoords(GetPlayerPed(player.PlayerData.source)) - plantCoords) > 2 then return end
     if not MySQL.prepare.await('SELECT 1 FROM house_plants WHERE id = ?', { plantId }) then
-        exports.qbx_core:Notify(src, locale('error.this_plant_no_longer_exists'), 'error' )
+        exports.qbx_core:Notify(player.PlayerData.source, locale('error.this_plant_no_longer_exists'), 'error' )
         return
     end
 
@@ -124,7 +124,7 @@ RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, seedAmount, pla
     local harvestAmount = math.random(12, 16)
 
     if not weedBag or weedBag.amount < harvestAmount then
-        exports.qbx_core:Notify(src, locale('error.you_dont_have_enough_resealable_bags'), 'error')
+        exports.qbx_core:Notify(player.PlayerData.source, locale('error.you_dont_have_enough_resealable_bags'), 'error')
         return
     end
 
@@ -132,7 +132,7 @@ RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, seedAmount, pla
         player.Functions.AddItem(plantItemName .. '_seed', seedAmount)
         player.Functions.AddItem(plantItemName, harvestAmount)
         MySQL.prepare.await('DELETE FROM house_plants WHERE id = ?', { plantId })
-        exports.qbx_core:Notify(src, locale('text.the_plant_has_been_harvested'), 'success')
+        exports.qbx_core:Notify(player.PlayerData.source, locale('text.the_plant_has_been_harvested'), 'success')
         TriggerClientEvent('qbx_weed:client:refreshHousePlants', -1, house)
     end
 end)
