@@ -21,10 +21,9 @@ RegisterNetEvent('qbx_weed:server:placePlant', function(coords, sort, currentHou
 end)
 
 RegisterNetEvent('qbx_weed:server:removeDeathPlant', function(building, plantId, plantCoords)
-    local src = source
-    local player = exports.qbx_core:GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(source)
     if not player or not building then return end
-    if #(GetEntityCoords(GetPlayerPed(src)) - plantCoords) > 2 then return end
+    if #(GetEntityCoords(GetPlayerPed(player.PlayerData.source)) - plantCoords) > 2 then return end
     MySQL.prepare.await('DELETE FROM house_plants WHERE id = ?', { plantId })
     TriggerClientEvent('qbx_weed:client:refreshHousePlants', -1, building)
 end)
@@ -106,18 +105,16 @@ exports.qbx_core:CreateUseableItem('weed_nutrition', function(source, item)
 end)
 
 RegisterServerEvent('qbx_weed:server:removeSeed', function(itemslot, seed)
-    local src = source
-    local player = exports.qbx_core:GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(source)
     if not player then return end
 
     player.Functions.RemoveItem(seed, 1, itemslot)
 end)
 
 RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, seedAmount, plantItemName, plantId, plantCoords)
-    local src = source
-    local player = exports.qbx_core:GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(source)
     if not player or not house then return end
-    if #(GetEntityCoords(GetPlayerPed(src)) - plantCoords) > 2 then return end
+    if #(GetEntityCoords(GetPlayerPed(player.PlayerData.source)) - plantCoords) > 2 then return end
     if not MySQL.prepare.await('SELECT 1 FROM house_plants WHERE id = ?', { plantId }) then
         exports.qbx_core:Notify(src, locale('error.this_plant_no_longer_exists'), 'error' )
         return
@@ -141,10 +138,10 @@ RegisterNetEvent('qbx_weed:server:harvestPlant', function(house, seedAmount, pla
 end)
 
 RegisterNetEvent('qbx_weed:server:foodPlant', function(house, amount, plantName, plantId)
-    local src = source
-    local player = exports.qbx_core:GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(source)
+    if not player then return end
     local plantStats = MySQL.prepare.await('SELECT food FROM house_plants WHERE id = ?', { plantId })
-    exports.qbx_core:Notify(src, sharedConfig.plants[plantName].label .. ' | Nutrition: ' .. plantStats.food .. '% + ' .. amount .. '% (' .. (plantStats.food + amount) .. '%)', 'inform')
+    exports.qbx_core:Notify(player.PlayerData.source, sharedConfig.plants[plantName].label .. ' | Nutrition: ' .. plantStats.food .. '% + ' .. amount .. '% (' .. (plantStats.food + amount) .. '%)', 'inform')
     if plantStats.food + amount > 100 then
         MySQL.update.await('UPDATE house_plants SET food = ? WHERE id = ?', { 100, plantId })
     else

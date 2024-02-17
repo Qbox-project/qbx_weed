@@ -47,7 +47,7 @@ end
 local function updatePlantStats()
     if not (insideHouse or plantsSpawned) then return end
     for k, v in pairs(housePlants[currentHouse]) do
-        local gender = (v.gender == 'female') and 'F' or 'M'
+        local gender = v.gender == 'female' and 'F' or 'M'
         local plyDistance = #(GetEntityCoords(cache.ped) - v.coords)
 
         if plyDistance < 0.8 then
