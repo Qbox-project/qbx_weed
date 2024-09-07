@@ -1,7 +1,7 @@
 {
     "error": {
         "process_canceled": "Proces zrušen",
-        "plant_has_died": "Rostlina uhynula. Stiskněte ~r~ E ~w~, abyste ji odstranili.",
+        "plant_has_died": "Rostlina uhynula. Stiskněte ~r~E~w~, abyste ji odstranili.",
         "cant_place_here": "Nemůžete to umístit sem",
         "not_safe_here": "Tady to není bezpečné, zkuste to ve svém domě",
         "not_need_nutrition": "Rostlina nepotřebuje živiny",
@@ -11,7 +11,7 @@
     },
     "text": {
         "sort": "Seřadit:",
-        "harvest_plant": "Stiskněte ~g~ E ~w~, abyste rostlinu sklízeli.",
+        "harvest_plant": "Stiskněte ~g~E~w~, abyste rostlinu sklízeli.",
         "nutrition": "Výživa:",
         "health": "Zdraví:",
         "harvesting_plant": "Sklízení rostliny",
