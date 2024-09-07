@@ -1,98 +1,94 @@
+---@type WeedSharedConfig
 return {
+    plantsSpawnType = 'both', -- Determine where plants are allowed to spawn
     plants = {
         og_kush = {
             label = 'OGKush 2g',
             item = 'weed_og-kush',
             stages = {
-                stage1 = 'bkr_prop_weed_01_small_01c',
-                stage2 = 'bkr_prop_weed_01_small_01b',
-                stage3 = 'bkr_prop_weed_01_small_01a',
-                stage4 = 'bkr_prop_weed_med_01b',
-                stage5 = 'bkr_prop_weed_lrg_01a',
-                stage6 = 'bkr_prop_weed_lrg_01b',
-                stage7 = 'bkr_prop_weed_lrg_01b',
-            },
-            highestStage = 'stage7'
+                'bkr_prop_weed_01_small_01c',
+                'bkr_prop_weed_01_small_01b',
+                'bkr_prop_weed_01_small_01a',
+                'bkr_prop_weed_med_01b',
+                'bkr_prop_weed_lrg_01a',
+                'bkr_prop_weed_lrg_01b',
+                'bkr_prop_weed_lrg_01b'
+            }
         },
         amnesia = {
             label = 'Amnesia 2g',
             item = 'weed_amnesia',
             stages = {
-                stage1 = 'bkr_prop_weed_01_small_01c',
-                stage2 = 'bkr_prop_weed_01_small_01b',
-                stage3 = 'bkr_prop_weed_01_small_01a',
-                stage4 = 'bkr_prop_weed_med_01b',
-                stage5 = 'bkr_prop_weed_lrg_01a',
-                stage6 = 'bkr_prop_weed_lrg_01b',
-                stage7 = 'bkr_prop_weed_lrg_01b',
-            },
-            highestStage = 'stage7'
+                'bkr_prop_weed_01_small_01c',
+                'bkr_prop_weed_01_small_01b',
+                'bkr_prop_weed_01_small_01a',
+                'bkr_prop_weed_med_01b',
+                'bkr_prop_weed_lrg_01a',
+                'bkr_prop_weed_lrg_01b',
+                'bkr_prop_weed_lrg_01b'
+            }
         },
         skunk = {
             label = 'Skunk 2g',
             item = 'weed_skunk',
             stages = {
-                stage1 = 'bkr_prop_weed_01_small_01c',
-                stage2 = 'bkr_prop_weed_01_small_01b',
-                stage3 = 'bkr_prop_weed_01_small_01a',
-                stage4 = 'bkr_prop_weed_med_01b',
-                stage5 = 'bkr_prop_weed_lrg_01a',
-                stage6 = 'bkr_prop_weed_lrg_01b',
-                stage7 = 'bkr_prop_weed_lrg_01b',
-            },
-            highestStage = 'stage7'
+                'bkr_prop_weed_01_small_01c',
+                'bkr_prop_weed_01_small_01b',
+                'bkr_prop_weed_01_small_01a',
+                'bkr_prop_weed_med_01b',
+                'bkr_prop_weed_lrg_01a',
+                'bkr_prop_weed_lrg_01b',
+                'bkr_prop_weed_lrg_01b'
+            }
         },
         ak47 = {
             label = 'AK47 2g',
             item = 'weed_ak47',
             stages = {
-                stage1 = 'bkr_prop_weed_01_small_01c',
-                stage2 = 'bkr_prop_weed_01_small_01b',
-                stage3 = 'bkr_prop_weed_01_small_01a',
-                stage4 = 'bkr_prop_weed_med_01b',
-                stage5 = 'bkr_prop_weed_lrg_01a',
-                stage6 = 'bkr_prop_weed_lrg_01b',
-                stage7 = 'bkr_prop_weed_lrg_01b',
-            },
-            highestStage = 'stage7'
+                'bkr_prop_weed_01_small_01c',
+                'bkr_prop_weed_01_small_01b',
+                'bkr_prop_weed_01_small_01a',
+                'bkr_prop_weed_med_01b',
+                'bkr_prop_weed_lrg_01a',
+                'bkr_prop_weed_lrg_01b',
+                'bkr_prop_weed_lrg_01b'
+            }
         },
         purple_haze = {
             label = 'Purple Haze 2g',
             item = 'weed_purple-haze',
             stages = {
-                stage1 = 'bkr_prop_weed_01_small_01c',
-                stage2 = 'bkr_prop_weed_01_small_01b',
-                stage3 = 'bkr_prop_weed_01_small_01a',
-                stage4 = 'bkr_prop_weed_med_01b',
-                stage5 = 'bkr_prop_weed_lrg_01a',
-                stage6 = 'bkr_prop_weed_lrg_01b',
-                stage7 = 'bkr_prop_weed_lrg_01b',
-            },
-            highestStage = 'stage7'
+                'bkr_prop_weed_01_small_01c',
+                'bkr_prop_weed_01_small_01b',
+                'bkr_prop_weed_01_small_01a',
+                'bkr_prop_weed_med_01b',
+                'bkr_prop_weed_lrg_01a',
+                'bkr_prop_weed_lrg_01b',
+                'bkr_prop_weed_lrg_01b'
+            }
         },
         white_widow = {
             label = 'White Widow 2g',
             item = 'weed_white-widow',
             stages = {
-                stage1 = 'bkr_prop_weed_01_small_01c',
-                stage2 = 'bkr_prop_weed_01_small_01b',
-                stage3 = 'bkr_prop_weed_01_small_01a',
-                stage4 = 'bkr_prop_weed_med_01b',
-                stage5 = 'bkr_prop_weed_lrg_01a',
-                stage6 = 'bkr_prop_weed_lrg_01b',
-                stage7 = 'bkr_prop_weed_lrg_01b',
-            },
-            highestStage = 'stage7'
-        },
+                'bkr_prop_weed_01_small_01c',
+                'bkr_prop_weed_01_small_01b',
+                'bkr_prop_weed_01_small_01a',
+                'bkr_prop_weed_med_01b',
+                'bkr_prop_weed_lrg_01a',
+                'bkr_prop_weed_lrg_01b',
+                'bkr_prop_weed_lrg_01b'
+            }
+        }
     },
-    props = {
-        stage1 = 'bkr_prop_weed_01_small_01c',
-        stage2 = 'bkr_prop_weed_01_small_01b',
-        stage3 = 'bkr_prop_weed_01_small_01a',
-        stage4 = 'bkr_prop_weed_med_01b',
-        stage5 = 'bkr_prop_weed_lrg_01a',
-        stage6 = 'bkr_prop_weed_lrg_01b',
-        stage7 = 'bkr_prop_weed_lrg_01b',
+    stageProps = {
+        'bkr_prop_weed_01_small_01c',
+        'bkr_prop_weed_01_small_01b',
+        'bkr_prop_weed_01_small_01a',
+        'bkr_prop_weed_med_01b',
+        'bkr_prop_weed_lrg_01a',
+        'bkr_prop_weed_lrg_01b',
+        'bkr_prop_weed_lrg_01b'
     },
     items = {
         nutrition = 'weed_nutrition',
