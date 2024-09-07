@@ -1,0 +1,23 @@
+{
+    "error": {
+        "process_canceled": "Proces Geannuleerd",
+        "plant_has_died": "De plant is dood gegaan. Druk op ~r~E~w~ om de plant te verwijderen.",
+        "cant_place_here": "Kan hier niet plaatsen",
+        "not_safe_here": "Het is hier niet veilig, probeer een andere plek.",
+        "not_need_nutrition": "De plant is al goed gevoed.",
+        "this_plant_no_longer_exists": "Deze plant bestaat niet meer?",
+        "house_not_found": "Geen huis gevonden",
+        "you_dont_have_enough_resealable_bags": "Je hebt niet genoeg hersluitbare zakken."
+    },
+    "text": {
+        "sort": "Soort:",
+        "harvest_plant": "Druk op ~g~E~w~ om de plant te oogsten.",
+        "nutrition": "Voeding:",
+        "health": "Welzijn:",
+        "harvesting_plant": "Plant Oogsten",
+        "planting": "Planten",
+        "feeding_plant": "Plant Voeden",
+        "the_plant_has_been_harvested": "De plant is geoogst",
+        "removing_the_plant": "Plant Verwijderen"
+    }
+}
