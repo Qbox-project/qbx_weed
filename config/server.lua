@@ -8,7 +8,7 @@ return {
         min = 12,
         max = 16
     },
-    plantFoodCheckInterval = 1152000, -- How much milliseconds it takes for the plant food to be checked. Default 1152000 milliseconds (19.2 minutes)
-    plantGrowInterval = 576000, -- How much milliseconds it takes for the plant to grow. Default 576000 milliseconds (9.6 minutes)
-    outsidePlantsRefreshInterval = 25000, -- The amount of milliseconds it takes to refresh outside plants. Default 25000 milliseconds (25 seconds)
+    plantFoodCheckInterval = 1152, -- How much seconds it takes for the plant food to be checked. Default 1152 seconds (19.2 minutes)
+    plantGrowInterval = 576, -- How much seconds it takes for the plant to grow. Default 576 seconds (9.6 minutes)
+    outsidePlantsRefreshInterval = 25, -- The amount of seconds it takes to refresh outside plants. Default 25 seconds
 }
