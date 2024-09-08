@@ -1,7 +1,7 @@
 {
     "error": {
         "process_canceled": "Annulé",
-        "plant_has_died": "La plante est morte. Appuyez sur ~r~ E ~w~ pour la retirer.",
+        "plant_has_died": "La plante est morte. Appuyez sur ~r~E~w~ pour la retirer.",
         "cant_place_here": "Impossible de placer ici",
         "not_safe_here": "Ce n'est pas sûr ici, essayez dans votre maison.",
         "not_need_nutrition": "Cette plante n'a pas besoin d'engrais",
@@ -11,7 +11,7 @@
     },
     "text": {
         "sort": "Type:",
-        "harvest_plant": "Appuyez sur ~g~ E ~w~ pour recolter la plante.",
+        "harvest_plant": "Appuyez sur ~g~E~w~ pour recolter la plante.",
         "nutrition": "Engrais:",
         "health": "État:",
         "harvesting_plant": "Récolte la plante..",

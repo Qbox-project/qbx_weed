@@ -1,7 +1,7 @@
 {
     "error": {
         "process_canceled": "Process Canceled",
-        "plant_has_died": "The plant has died. Press ~r~ E ~w~ to remove plant.",
+        "plant_has_died": "The plant has died. Press ~r~E~w~ to remove plant.",
         "cant_place_here": "Can't Place Here",
         "not_safe_here": "It's Not Safe Here, try your house",
         "not_need_nutrition": "The Plant Does Not Need Nutrition",
@@ -11,7 +11,7 @@
     },
     "text": {
         "sort": "Sort:",
-        "harvest_plant": "Press ~g~ E ~w~ to harvest plant.",
+        "harvest_plant": "Press ~g~E~w~ to harvest plant.",
         "nutrition": "Nutrition:",
         "health": "Health:",
         "harvesting_plant": "Harvesting Plant",

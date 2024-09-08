@@ -1,7 +1,7 @@
 {
     "error": {
         "process_canceled": "Proceso cancelado",
-        "plant_has_died": "La planta a muerto. Presione ~r~ E ~w~ para remover planta.",
+        "plant_has_died": "La planta a muerto. Presione ~r~E~w~ para remover planta.",
         "cant_place_here": "No se puede colocar aquí",
         "not_safe_here": "No es seguro aquí, prueba en tu casa",
         "not_need_nutrition": "La planta no necesita nutrición",
@@ -11,7 +11,7 @@
     },
     "text": {
         "sort": "Tipo:",
-        "harvest_plant": "Presione ~g~ E ~w~ para cosechar la planta.",
+        "harvest_plant": "Presione ~g~E~w~ para cosechar la planta.",
         "nutrition": "Nutrición:",
         "health": "Salud:",
         "harvesting_plant": "Cosechando planta",
