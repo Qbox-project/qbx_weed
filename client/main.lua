@@ -63,20 +63,16 @@ end
 
 ---@param property string
 local function despawnPropertyPlants(property)
-    if not plantsSpawned or not property then return end
+    if not plantsSpawned or not property or not propertyPlants[property] then return end
 
-    local plants = propertyPlants[property]
-    if not plants then return end
-
-    for i = 1, #plants do
-        local plantData = plants[i]
+    for i = 1, #propertyPlants[property] do
+        local plantData = propertyPlants[property][i]
         for stage = 1, #sharedConfig.plants[plantData.sort].stages do
             deleteClosestPlant(stage, plantData)
         end
-
-        plants[i] = nil
     end
 
+    propertyPlants[property] = {}
     plantsSpawned = false
 end
 
@@ -89,10 +85,9 @@ local function despawnOutsidePlants(property)
         for stage = 1, #sharedConfig.plants[plantData.sort].stages do
             deleteClosestPlant(stage, plantData)
         end
-
-        outsidePlants[i] = nil
     end
 
+    outsidePlants = {}
     plantsSpawned = false
 end
 
@@ -274,8 +269,6 @@ RegisterNetEvent('qbx_core:client:onSetMetaData', function(meta, oldValue, value
 
         Wait(1000)
 
-        outsidePlants = {}
-
         local plants = lib.callback.await('qbx_weed:server:getPropertyPlants', false, currentProperty)
         propertyPlants[currentProperty] = plants
         spawnPropertyPlants()
@@ -327,10 +320,6 @@ RegisterNetEvent('qbx_weed:client:refreshOutsidePlants', function(plants)
     if currentProperty then
         if table.type(outsidePlants) ~= 'empty' then
             despawnOutsidePlants(currentProperty)
-
-            Wait(1000)
-
-            outsidePlants = {}
         end
 
         return
@@ -339,8 +328,6 @@ RegisterNetEvent('qbx_weed:client:refreshOutsidePlants', function(plants)
     despawnOutsidePlants(currentProperty)
 
     Wait(1000)
-
-    outsidePlants = {}
 
     local closePlants = {}
     local playerCoords = GetEntityCoords(cache.ped)
