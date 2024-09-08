@@ -201,14 +201,16 @@ CreateThread(function()
         outsidePlants[plant.id] = plant.coords
     end
 
+    local sleep = config.outsidePlantsRefreshInterval * 1000
     while true do
         TriggerClientEvent('qbx_weed:client:refreshOutsidePlants', -1, outsidePlants)
 
-        Wait(config.outsidePlantsRefreshInterval)
+        Wait(sleep)
     end
 end)
 
 CreateThread(function()
+    local sleep = config.plantFoodCheckInterval * 1000
     while true do
         local plants = MySQL.query.await('SELECT id, food, health FROM weed_plants')
         for i = 1, #plants do
@@ -217,11 +219,12 @@ CreateThread(function()
 
         TriggerClientEvent('qbx_weed:client:refreshPlantStats', -1)
 
-        Wait(config.plantFoodCheckInterval)
+        Wait(sleep)
     end
 end)
 
 CreateThread(function()
+    local sleep = config.plantGrowInterval * 1000
     while true do
         local plants = MySQL.query.await('SELECT id, stage, sort, health, stageProgress FROM weed_plants')
         for i = 1, #plants do
@@ -230,6 +233,6 @@ CreateThread(function()
 
         TriggerClientEvent('qbx_weed:client:refreshPlantStats', -1)
 
-        Wait(config.plantGrowInterval)
+        Wait(sleep)
     end
 end)
