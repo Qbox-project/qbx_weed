@@ -6,7 +6,7 @@ local config = require 'config.client'
 local propertyPlants = {}
 ---@type WeedPlant[]
 local outsidePlants = {}
-local currentProperty = exports.qbx_core:GetPlayerData()?.metadata.currentPropertyId
+local currentProperty = exports.qbx_core:GetPlayerData()?.metadata?.currentPropertyId
 local plantsSpawned = false
 local closestTarget = 0
 
