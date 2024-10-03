@@ -1,0 +1,23 @@
+{
+    "error": {
+        "process_canceled": "Processo Cancelado",
+        "plant_has_died": "A planta morreu. Pressione ~r~E~w~ para remover a planta.",
+        "cant_place_here": "Não pode plantar aqui",
+        "not_safe_here": "Não é seguro aqui, tente na sua casa",
+        "not_need_nutrition": "A planta não precisa de nutrição",
+        "this_plant_no_longer_exists": "Esta planta não existe mais?",
+        "house_not_found": "Casa não encontrada",
+        "you_dont_have_enough_resealable_bags": "Você não tem sacos resseláveis suficientes"
+    },
+    "text": {
+        "sort": "Ordenar:",
+        "harvest_plant": "Pressione ~g~E~w~ para colher a planta.",
+        "nutrition": "Nutrição:",
+        "health": "Saúde:",
+        "harvesting_plant": "Colhendo a planta",
+        "planting": "Plantando",
+        "feeding_plant": "Alimentando a planta",
+        "the_plant_has_been_harvested": "A planta foi colhida",
+        "removing_the_plant": "Removendo a planta"
+    }
+}
