@@ -1,0 +1,23 @@
+{
+  "error": {
+    "process_canceled": "Proces anulowany",
+    "plant_has_died": "Roślina umarła. Naciśnij ~r~E~w~, aby usunąć roślinę.",
+    "cant_place_here": "Nie można tutaj umieścić",
+    "not_safe_here": "Tutaj nie jest bezpiecznie, spróbuj w swoim domu",
+    "not_need_nutrition": "Roślina nie potrzebuje nawożenia",
+    "this_plant_no_longer_exists": "Ta roślina już nie istnieje?",
+    "house_not_found": "Dom nie znaleziony",
+    "you_dont_have_enough_resealable_bags": "Nie masz wystarczającej liczby woreczków zamykanych"
+  },
+  "text": {
+    "sort": "Sortuj:",
+    "harvest_plant": "Naciśnij ~g~E~w~, aby zebrać roślinę.",
+    "nutrition": "Nawożenie:",
+    "health": "Zdrowie:",
+    "harvesting_plant": "Zbieranie rośliny",
+    "planting": "Sadzenie",
+    "feeding_plant": "Nawożenie rośliny",
+    "the_plant_has_been_harvested": "Roślina została zebrana",
+    "removing_the_plant": "Usuwanie rośliny"
+  }
+}
