@@ -1,0 +1,23 @@
+{
+  "error": {
+    "process_canceled": "İşlem İptal Edildi",
+    "plant_has_died": "Bitki öldü. Bitkiyi kaldırmak için ~r~E~w~ tuşuna basın.",
+    "cant_place_here": "Buraya Yerleştirilemiyor",
+    "not_safe_here": "Bura Güvenli Değil, evini dene",
+    "not_need_nutrition": "Bitkinin Beslenmeye İhtiyacı Yok",
+    "this_plant_no_longer_exists": "Bu bitki artık mevcut değil mi?",
+    "house_not_found": "Ev Bulunamadı",
+    "you_dont_have_enough_resealable_bags": "Yeterli yeniden kapatılabilir çantaya sahip değilsin"
+  },
+  "text": {
+    "sort": "Sırala:",
+    "harvest_plant": "Bitkiyi hasat etmek için ~g~E~w~ tuşuna basın.",
+    "nutrition": "Besin:",
+    "health": "Sağlık:",
+    "harvesting_plant": "Bitki hasat ediliyor",
+    "planting": "Ekim yapılıyor",
+    "feeding_plant": "Bitki besleniyor",
+    "the_plant_has_been_harvested": "Bitki hasat edildi",
+    "removing_the_plant": "Bitki kaldırılıyor"
+  }
+}
