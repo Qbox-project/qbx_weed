@@ -1,0 +1,23 @@
+{
+    "error": {
+        "process_canceled": "処理がキャンセルされました",
+        "plant_has_died": "植物が枯れました。~r~E~w~ を押して植物を取り除いてください。",
+        "cant_place_here": "ここには配置できません",
+        "not_safe_here": "ここは安全ではありません。自宅を試してください",
+        "not_need_nutrition": "植物は栄養を必要としていません",
+        "this_plant_no_longer_exists": "この植物はもう存在しません？",
+        "house_not_found": "家が見つかりません",
+        "you_dont_have_enough_resealable_bags": "再封可能な袋が足りません"
+    },
+    "text": {
+        "sort": "ソート：",
+        "harvest_plant": "~g~E~w~ を押して植物を収穫してください。",
+        "nutrition": "栄養：",
+        "health": "健康：",
+        "harvesting_plant": "植物を収穫中",
+        "planting": "植えています",
+        "feeding_plant": "植物に栄養を与えています",
+        "the_plant_has_been_harvested": "植物を収穫しました",
+        "removing_the_plant": "植物を取り除いています"
+    }
+}
