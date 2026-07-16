@@ -130,8 +130,7 @@ local function updatePlantStats()
                             },
                         })
                         then
-                            local amount = gender == 'M' and math.random(1, 2) or math.random(1, 6)
-                            TriggerServerEvent('qbx_weed:server:harvestPlant', currentProperty, amount, sharedConfig.plants[plant.sort].item, plant.id, plant.coords)
+                            TriggerServerEvent('qbx_weed:server:harvestPlant', currentProperty, plant.id)
                         else
                             exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
                         end
@@ -161,7 +160,7 @@ local function updatePlantStats()
                             },
                         })
                     then
-                        TriggerServerEvent('qbx_weed:server:removeDeadPlant', currentProperty, plant.id, plant.coords)
+                        TriggerServerEvent('qbx_weed:server:removeDeadPlant', currentProperty, plant.id)
                     else
                         exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
                     end
@@ -207,8 +206,7 @@ exports('placePlant', function(type, item)
         },
     })
     then
-        TriggerServerEvent('qbx_weed:server:placePlant', plyCoords, type, currentProperty)
-        TriggerServerEvent('qbx_weed:server:removeSeed', item.slot, item.name)
+        TriggerServerEvent('qbx_weed:server:placePlant', plyCoords, type, currentProperty, item.slot, item.name)
     else
         exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
     end
@@ -250,8 +248,7 @@ exports('foodPlant', function()
             },
         })
     then
-        local newFood = math.random(40, 60)
-        TriggerServerEvent('qbx_weed:server:foodPlant', currentProperty, newFood, data.sort, data.id)
+        TriggerServerEvent('qbx_weed:server:foodPlant', currentProperty, data.id)
     else
         exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
     end
