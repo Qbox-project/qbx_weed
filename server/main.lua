@@ -9,8 +9,10 @@ local outsidePlants = {}
 local plantLocks = {}
 
 local function isValidContext(player, property)
+    if property ~= nil and type(property) ~= 'string' then return false end
     if (property and sharedConfig.plantsSpawnType == 'outside') or (not property and sharedConfig.plantsSpawnType == 'property') then return false end
-    return player.PlayerData.metadata.currentPropertyId == property
+    local currentProperty = player.PlayerData.metadata.currentPropertyId
+    return (currentProperty and tostring(currentProperty) or nil) == property
 end
 
 local function getPlant(source, property, plantId)
@@ -21,6 +23,9 @@ local function getPlant(source, property, plantId)
 
     local plant = MySQL.single.await('SELECT * FROM weed_plants WHERE id = ?', {plantId})
     if not plant or plant.property ~= property then return end
+    local currentPlayer = exports.qbx_core:GetPlayer(source)
+    if not currentPlayer or currentPlayer.PlayerData.citizenid ~= player.PlayerData.citizenid
+        or not isValidContext(currentPlayer, property) then return end
 
     local coords = json.decode(plant.coords)
     if not coords then return end
@@ -36,7 +41,7 @@ lib.callback.register('qbx_weed:server:getPropertyPlants', function(source, prop
     if sharedConfig.plantsSpawnType == 'outside' then return {} end
 
     local player = exports.qbx_core:GetPlayer(source)
-    if not player or type(property) ~= 'string' or player.PlayerData.metadata.currentPropertyId ~= property then return {} end
+    if not player or type(property) ~= 'string' or not isValidContext(player, property) then return {} end
 
     local propertyPlants = {}
     local plants = MySQL.query.await('SELECT * FROM weed_plants WHERE property = ?', { property })
