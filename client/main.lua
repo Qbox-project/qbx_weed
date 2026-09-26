@@ -174,7 +174,7 @@ local function updatePlantStats()
     return sleep
 end
 
-exports('placePlant', function(type, item)
+local function placePlant(type, item)
     local plyCoords = GetOffsetFromEntityInWorldCoords(cache.ped, 0, 0.75, 0)
     local closestPlant = 0
     for i = 1, #sharedConfig.stageProps do
@@ -212,9 +212,12 @@ exports('placePlant', function(type, item)
     end
 
     ClearPedTasks(cache.ped)
-end)
+end
 
-exports('foodPlant', function()
+exports('placePlant', placePlant)
+RegisterNetEvent('qbx_weed:client:placePlant', placePlant)
+
+local function foodPlant()
     if closestTarget == 0 then
         return exports.qbx_core:Notify(locale('error.not_safe_here'), 'error')
     end
@@ -254,7 +257,10 @@ exports('foodPlant', function()
     end
 
     ClearPedTasks(cache.ped)
-end)
+end
+
+exports('foodPlant', foodPlant)
+RegisterNetEvent('qbx_weed:client:foodPlant', foodPlant)
 
 RegisterNetEvent('qbx_core:client:onSetMetaData', function(meta, oldValue, value)
     if meta ~= 'currentPropertyId' then return end

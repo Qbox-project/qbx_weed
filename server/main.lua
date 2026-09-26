@@ -247,6 +247,16 @@ RegisterNetEvent('qbx_weed:server:foodPlant', function(property, plantId)
     end
 end)
 
+for sort, plantConfig in pairs(sharedConfig.plants) do
+    exports.qbx_core:CreateUseableItem(plantConfig.item .. '_seed', function(source, item)
+        TriggerClientEvent('qbx_weed:client:placePlant', source, sort, item)
+    end)
+end
+
+exports.qbx_core:CreateUseableItem(sharedConfig.items.nutrition, function(source)
+    TriggerClientEvent('qbx_weed:client:foodPlant', source)
+end)
+
 AddEventHandler('qbx_core:server:onSetMetaData', function(meta, _, value, source)
     if meta ~= 'currentPropertyId' or value then return end
 
